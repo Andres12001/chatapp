@@ -1,4 +1,4 @@
-# first_app
+# Metix
 
 A new Flutter project.
 
