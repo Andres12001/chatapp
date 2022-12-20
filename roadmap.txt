@@ -1,0 +1,61 @@
+
+
+features :
+
+* Design and firebase
+welcome screen
+login
+signup
+join meeting by code
+	meeting id
+	meeting password
+	name
+logout
+
+main screen :
+
+	home : 
+		new meeting
+		join meeting
+		schedule
+		list of current meetings
+		list of schedule meetings
+
+	history :
+		list of history
+			meeting details
+
+	schedule
+		list of schedule meetings
+		new schedule
+
+	settings
+		profile recap
+			profile edit
+			upgrade
+		dark mode
+		p&p
+		tos
+		about
+		version
+
+* Notifications and callkit
+* add admob
+* responive
+
+sign in with
+	phone
+	mail
+	google
+	fb
+	anonyumus
+
+
+
+
+
+//
+dark mode
+localization
+icon
+upload
