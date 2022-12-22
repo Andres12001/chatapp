@@ -1,9 +1,10 @@
-import 'package:first_app/View/Auth/Widgets/Auth/ButtonOriginal.dart';
-import 'package:first_app/View/Auth/Widgets/Auth/ButtonsStretch.dart';
 import 'package:first_app/ViewModel/Auth/LoginVM.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../Constants/Constants.dart';
+import '../../../Helpers/ListenedValues.dart';
+import 'ButtonOriginal.dart';
 import 'TextFieldWidget.dart';
 
 class LoginContent extends StatelessWidget {
@@ -54,7 +55,10 @@ class LoginContent extends StatelessWidget {
                     text: "Login",
                     bgColor: kPrimaryColor,
                     txtColor: Colors.white,
-                    onPress: () => loginVM.login(),
+                    onPress: () => loginVM.loginUsingEmailPassword(
+                        context: context,
+                        email: "test@test.com",
+                        password: "123456"),
                     icon: Icons.login,
                     width: 200,
                   )
@@ -62,14 +66,34 @@ class LoginContent extends StatelessWidget {
               ),
             ),
 
-            // const Spacer(),
-            const Padding(
+            Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Terms and conditions",
-                style: TextStyle(
-                  fontSize: 15,
-                  color: kSecondaryColor,
+              child: InkWell(
+                onTap: () => loginVM.goToSignup(context),
+                child: const Text(
+                  "Not a member yet? Signup now",
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: kPrimaryColor,
+                  ),
+                ),
+              ),
+            ),
+
+            // const Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                onTap: () => {},
+                child: Text(
+                  // "Terms and conditions",
+                  "${Provider.of<ListenedValues>(context).isLoading}",
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: kSecondaryColor,
+                  ),
                 ),
               ),
             ),

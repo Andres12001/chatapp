@@ -39,7 +39,15 @@ dependencies:
   google_fonts: ^3.0.1
   provider: ^6.0.5
   rename: ^2.0.1 
-  window_manager: ^0.2.8
+  image_picker_gallery_camera: ^0.2.2
+  cached_network_image: ^3.2.3
+  firebase_database: ^10.0.7
+  firebase_auth: ^4.2.1
+  firebase_storage: ^11.0.8
+  firebase_messaging: ^14.1.4
+  firebase_core: ^2.4.0
+  blurry_modal_progress_hud: ^1.0.3
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

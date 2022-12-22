@@ -1,31 +1,26 @@
 import 'package:first_app/Constants/Constants.dart';
-import 'package:first_app/View/Auth/Widgets/Auth/LoginContent.dart';
-import 'package:first_app/ViewModel/Auth/LoginVM.dart';
+import 'package:first_app/ViewModel/Auth/WelcomeVM.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import '../../Widgets/Auth/WelcomeHeader.dart';
+import '../Widgets/WelcomeContent.dart';
+import '../Widgets/WelcomeHeader.dart';
 
-class LoginView extends StatelessWidget {
-  LoginView({super.key});
-  static const String screenRouteName = "/Login";
+class WelcomeView extends StatelessWidget {
+  static const String screenRouteName = "/Welcome";
 
-  final LoginVM _loginVM = LoginVM();
+  final WelcomeVM _welcomeVM = WelcomeVM();
+
+  WelcomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // to provide us the height and the width of the sceen
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: kPrimaryColor,
-        title: Text(
-          "Metix",
-          style: GoogleFonts.lobster(
-              textStyle: const TextStyle(color: Colors.white)),
-        ),
       ),
       body: SafeArea(
         bottom: false,
@@ -34,8 +29,11 @@ class LoginView extends StatelessWidget {
             hasScrollBody: false,
             child: Column(children: [
               //main container
-              WelcomeHeader(size: size),
-              LoginContent(loginVM: _loginVM)
+              WelcomeHeader(
+                size: size,
+                title: 'Metix',
+              ),
+              WelcomeContent(welcomeVM: _welcomeVM)
               //overlay container
             ]),
           ),

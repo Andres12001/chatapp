@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WelcomeHeader extends StatelessWidget {
-  const WelcomeHeader({super.key, required this.size});
+  const WelcomeHeader({super.key, required this.size, required this.title});
   final Size size;
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,7 +21,7 @@ class WelcomeHeader extends StatelessWidget {
         child: Center(
           //Lobster font
           child: Text(
-            "Metix",
+            title,
             style: GoogleFonts.lobster(
                 textStyle: const TextStyle(color: Colors.white, fontSize: 60)),
           ),

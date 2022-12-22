@@ -31,10 +31,18 @@ class ButtonOriginal extends StatelessWidget {
               elevation: 7,
               color: bgColor,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
+                padding: EdgeInsets.symmetric(vertical: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Icon(
+                      icon,
+                      size: 25,
+                      color: txtColor,
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Text(
                       text,
                       textAlign: TextAlign.center,
@@ -43,11 +51,6 @@ class ButtonOriginal extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         color: txtColor,
                       ),
-                    ),
-                    Icon(
-                      icon,
-                      size: 25,
-                      color: txtColor,
                     )
                   ],
                 ),

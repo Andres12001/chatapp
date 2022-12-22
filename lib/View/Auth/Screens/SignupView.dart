@@ -1,11 +1,11 @@
 import 'package:first_app/Constants/Constants.dart';
-import 'package:first_app/View/Auth/Widgets/Auth/LoginContent.dart';
-import 'package:first_app/View/Auth/Widgets/Auth/SignupContent.dart';
+
 import 'package:first_app/ViewModel/Auth/SignupVM.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../Widgets/Auth/WelcomeHeader.dart';
+import '../Widgets/SignupContent.dart';
+import '../Widgets/WelcomeHeader.dart';
 
 class SignupView extends StatelessWidget {
   SignupView({super.key});
@@ -35,7 +35,10 @@ class SignupView extends StatelessWidget {
             hasScrollBody: false,
             child: Column(children: [
               //main container
-              WelcomeHeader(size: size),
+              WelcomeHeader(
+                size: size,
+                title: 'Signup',
+              ),
               SignupContent(signupVM: _signupVM)
               //overlay container
             ]),

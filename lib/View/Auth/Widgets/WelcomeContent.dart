@@ -1,9 +1,10 @@
 import 'package:first_app/Constants/Constants.dart';
-import 'package:first_app/View/Auth/Screens/Auth/LoginView.dart';
-import 'package:first_app/View/Auth/Screens/Auth/SignupView.dart';
-import 'package:first_app/View/Auth/Widgets/Auth/ButtonsStretch.dart';
 import 'package:first_app/ViewModel/Auth/WelcomeVM.dart';
 import 'package:flutter/material.dart';
+
+import '../Screens/LoginView.dart';
+import '../Screens/SignupView.dart';
+import 'ButtonsStretch.dart';
 
 class WelcomeContent extends StatelessWidget {
   const WelcomeContent({super.key, required this.welcomeVM});

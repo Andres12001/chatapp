@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "941240450759",
+    "firebase_url": "https://metix-5a27b-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "metix-5a27b",
+    "storage_bucket": "metix-5a27b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941240450759:android:20b37d524eb38d0c0788e2",
+        "android_client_info": {
+          "package_name": "com.swirl.metix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "941240450759-5o3lb9qcolvdk3es9caogd4hmp19ogmr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv4HRFhUJYRKzFyjNg2H8bKSwpcCFctfc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "941240450759-5o3lb9qcolvdk3es9caogd4hmp19ogmr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "941240450759-0srkvglf1rg69d3h859qdnb3hqr8oge5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.swirl.metix"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,6 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -47,5 +48,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+     <string>We use it in image picker to add images</string>
+     <key>NSPhotoLibraryAddUsageDescription</key>
+     <string>We use it to save photos in your library</string>
+	  <key>NSCameraUsageDescription</key>
+     <string>We use it in image capture to add images</string>
+	 	  <key>NSMicrophoneUsageDescription</key>
+     <string>We use it in audio calls</string>
 </dict>
 </plist>
