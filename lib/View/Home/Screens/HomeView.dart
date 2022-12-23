@@ -1,9 +1,8 @@
-import 'dart:html';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
+import '../../../Helpers/FirebaseMethods.dart';
 import '../../Auth/Widgets/ButtonOriginal.dart';
 
 class HomeView extends StatelessWidget {
@@ -25,6 +24,8 @@ class HomeView extends StatelessWidget {
   }
 
   void signout(BuildContext context) {
+    FirebaseMethods.onlineControl(false);
+    FirebaseMethods.goOfflineDisconnect();
     _auth.signOut();
   }
 }

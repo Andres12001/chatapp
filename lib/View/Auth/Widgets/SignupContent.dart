@@ -18,6 +18,11 @@ class SignupContent extends StatefulWidget {
 
 class _SignupContentState extends State<SignupContent> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       //  margin: EdgeInsets.only(top: size.height * 0.09),
@@ -44,11 +49,12 @@ class _SignupContentState extends State<SignupContent> {
                     url: widget.signupVM.imageFinal?.path,
                     name:
                         "${widget.signupVM.nameFController.text} ${widget.signupVM.nameLController.text}",
-                    onPress: () => widget.signupVM.getImage(
+                    onPress: () => getImage(
                         ImgSource.Both,
                         context,
                         (imagePicked) => {
                               setState(() {
+                                print(imagePicked.path);
                                 widget.signupVM.imageFinal = imagePicked;
                               })
                             }),
@@ -111,16 +117,15 @@ class _SignupContentState extends State<SignupContent> {
                   text: "Signup",
                   bgColor: kPrimaryColor,
                   txtColor: Colors.white,
-                  onPress: () => widget.signupVM.signupUsingEmailPassword(
+                  onPress: () => widget.signupVM.signUpPre(
                       context: context,
-                      email: "test2@test.com",
-                      password: "123456"),
+                      email: widget.signupVM.emailController.text,
+                      password: widget.signupVM.passwordController.text,
+                      nameF: widget.signupVM.nameFController.text,
+                      nameL: widget.signupVM.nameLController.text),
                   icon: Icons.person_add,
                   width: 200,
                 ),
-                // widget.signupVM.imageFinal != null
-                //     ? Image.file(File(widget.signupVM.imageFinal.path))
-                //     : Container(),
               ],
             ),
 
@@ -160,5 +165,37 @@ class _SignupContentState extends State<SignupContent> {
         ),
       ),
     );
+  }
+
+  Future getImage(
+      ImgSource source, BuildContext context, Function(dynamic) finish) async {
+    var image = await ImagePickerGC.pickImage(
+        enableCloseButton: true,
+        imageQuality: 40,
+        closeIcon: const Icon(
+          Icons.close,
+          color: Colors.red,
+          size: 12,
+        ),
+        context: context,
+        source: source,
+        barrierDismissible: true,
+        galleryIcon: const Icon(
+          Icons.photo,
+          color: kPrimaryColor,
+        ),
+        cameraIcon: const Icon(
+          Icons.camera_alt,
+          color: Colors.red,
+        ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
+        cameraText: const Text(
+          "From Camera",
+          style: TextStyle(color: Colors.red),
+        ),
+        galleryText: const Text(
+          "From Gallery",
+          style: TextStyle(color: kPrimaryColor),
+        ));
+    finish(image);
   }
 }

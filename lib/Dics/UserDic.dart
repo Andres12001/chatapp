@@ -1,6 +1,6 @@
 class UserDic {
-  static Map<String, dynamic> createUserMap(
-      String loginInfo, String id, bool ios, String name, String? ava) {
+  static Map<String, dynamic> createUserMap(String loginInfo, String id,
+      bool ios, String nameF, String nameL, String? ava) {
     Map<String, dynamic> map = {
       "loginInfo": loginInfo,
       "id": id,
@@ -8,7 +8,8 @@ class UserDic {
       "isAdmin": false,
       "ios": ios,
       "isprivate": false,
-      "name": name,
+      "nameF": nameF,
+      "nameL": nameL,
       "online": true,
       "statue": "Hello , I'm using metix from Swirl code",
       "typing": "",

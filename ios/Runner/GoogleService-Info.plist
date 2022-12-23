@@ -30,5 +30,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:941240450759:ios:8e84ef8bdb3cda9c0788e2</string>
+	<key>DATABASE_URL</key>
+	<string>https://metix-5a27b-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>
 </plist>

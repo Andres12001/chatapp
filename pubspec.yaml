@@ -47,7 +47,8 @@ dependencies:
   firebase_messaging: ^14.1.4
   firebase_core: ^2.4.0
   blurry_modal_progress_hud: ^1.0.3
-  
+  imager: ^1.0.1
+  flutter_fgbg: ^0.2.2  
 dev_dependencies:
   flutter_test:
     sdk: flutter

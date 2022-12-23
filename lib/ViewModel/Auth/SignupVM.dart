@@ -1,14 +1,19 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, curly_braces_in_flow_control_structures
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Dics/UserDic.dart';
+import 'package:first_app/Helpers/Extensions.dart';
 import 'package:first_app/View/Auth/Screens/LoginView.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
 import 'package:provider/provider.dart';
 
+import '../../Constants/FirebaseConst.dart';
+import '../../Constants/FirebaseMessages.dart';
+import '../../Helpers/FirebaseAuthMethods.dart';
+import '../../Helpers/FirebaseMethods.dart';
 import '../../Helpers/ListenedValues.dart';
 import '../../View/Home/Screens/HomeView.dart';
 
@@ -19,6 +24,8 @@ class SignupVM {
   TextEditingController nameLController = TextEditingController();
 
   var imageFinal;
+  final FirebaseAuthMethods _firebaseAuthMethods = FirebaseAuthMethods();
+  final FirebaseMethods _firebaseMethods = FirebaseMethods();
 
   void fieldUpdate(String value, TextEditingController controller,
       Function(String) updateUI) {
@@ -26,90 +33,71 @@ class SignupVM {
     updateUI(value);
   }
 
-  Future<User?> signupUsingEmailPassword({
-    required String email,
-    required String password,
-    required BuildContext context,
-  }) async {
-    Provider.of<ListenedValues>(context, listen: false).isLoading = true;
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user;
-
-    try {
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+  void signUpPre(
+      {required String email,
+      required String password,
+      required BuildContext context,
+      required String nameF,
+      required String nameL}) {
+    if (nameF.trim().isEmpty || nameL.trim().isEmpty || email.trim().isEmpty) {
+      print("Please fill all fields");
+      return;
+    }
+    if (password.trim().length > 6) {
+      print("Please enter password contains at least 6 char");
+      return;
+    }
+    Provider.of<ListenedValues>(context, listen: false).setLoading(true);
+    nameF = nameF.toCapitalized();
+    nameL = nameL.toCapitalized();
+    _firebaseAuthMethods.signupUsingEmailPassword(
         email: email,
         password: password,
-      );
-      user = userCredential.user;
-      print(user);
-      print("toooot");
-      uploadAva("loginInfo", "id", true, "name", null);
-      Navigator.pushNamedAndRemoveUntil(
-          context, HomeView.screenRouteName, (route) => false);
-    } on FirebaseAuthException catch (e) {
-      //  Provider.of<ListenedValues>(context, listen: false).setLoading(false);
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided.');
-      }
-    }
-
-    return user;
+        onSucc: (user) {
+          uploadAva(context, email, user!.uid, true, nameF, nameL);
+        },
+        onFailed: (e) {
+          Provider.of<ListenedValues>(context, listen: false).setLoading(false);
+          print(e);
+        });
   }
 
-  void uploadAva(
-      String loginInfo, String id, bool ios, String name, String? ava) {
+  void uploadAva(BuildContext context, String loginInfo, String id, bool ios,
+      String nameF, String nameL) {
     if (imageFinal != null) {
-      print("not");
+      _firebaseMethods.uploadPhotoStorage(
+          childPath: FirebaseConst.AVA,
+          file: imageFinal,
+          onSucc: (url) {
+            regUserDb(context, loginInfo, id, ios, nameF, nameL, url);
+          },
+          onFailed: (e) {
+            Provider.of<ListenedValues>(context, listen: false)
+                .setLoading(false);
+          });
     } else {
-      print("yes");
-
-      regUserDb(loginInfo, id, ios, name, ava);
+      regUserDb(context, loginInfo, id, ios, nameF, nameL, null);
     }
   }
 
-  void regUserDb(
-      String loginInfo, String id, bool ios, String name, String? ava) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref();
-    try {
-      await ref.set(UserDic.createUserMap(loginInfo, id, ios, name, ava));
-      // Provider.of<ListenedValues>(context, listen: false).setLoading(false);
-    } catch (e) {
-      // Provider.of<ListenedValues>(context, listen: false).setLoading(false);
-      print(e);
-    }
-  }
+  void regUserDb(BuildContext context, String loginInfo, String id, bool ios,
+      String nameF, String nameL, String? ava) async {
+    await FirebaseAuth.instance.currentUser?.updateDisplayName("$nameF $nameL");
+    await FirebaseAuth.instance.currentUser?.updatePhotoURL(ava ?? "");
+    print(id);
+    _firebaseMethods.setDataInFirebase(
+        childPath: "${FirebaseConst.USERS}/$id",
+        map: UserDic.createUserMap(loginInfo, id, ios, nameF, nameL, ava),
+        onSucc: () {
+          Provider.of<ListenedValues>(context, listen: false).setLoading(false);
 
-  Future getImage(
-      ImgSource source, BuildContext context, Function(dynamic) finish) async {
-    var image = await ImagePickerGC.pickImage(
-        enableCloseButton: true,
-        closeIcon: const Icon(
-          Icons.close,
-          color: Colors.red,
-          size: 12,
-        ),
-        context: context,
-        source: source,
-        barrierDismissible: true,
-        galleryIcon: const Icon(
-          Icons.photo,
-          color: kPrimaryColor,
-        ),
-        cameraIcon: const Icon(
-          Icons.camera_alt,
-          color: Colors.red,
-        ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
-        cameraText: const Text(
-          "From Camera",
-          style: TextStyle(color: Colors.red),
-        ),
-        galleryText: const Text(
-          "From Gallery",
-          style: TextStyle(color: kPrimaryColor),
-        ));
-    finish(image);
+          Navigator.pushNamedAndRemoveUntil(
+              context, HomeView.screenRouteName, (route) => false);
+        },
+        onFailed: (e) {
+          Provider.of<ListenedValues>(context, listen: false).setLoading(false);
+          FirebaseMessages.getMessageFromErrorCode(e);
+        });
   }
 
   void goToLogin(BuildContext context) {
