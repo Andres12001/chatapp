@@ -1,8 +1,10 @@
 import 'package:first_app/ViewModel/Auth/SignupVM.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'dart:io';
 import '../../../../Constants/Constants.dart';
+import '../Sheets/TermsSheetView.dart';
 import 'AvatarCustom.dart';
 import 'ButtonOriginal.dart';
 import 'TextFieldWidget.dart';
@@ -54,7 +56,6 @@ class _SignupContentState extends State<SignupContent> {
                         context,
                         (imagePicked) => {
                               setState(() {
-                                print(imagePicked.path);
                                 widget.signupVM.imageFinal = imagePicked;
                               })
                             }),
@@ -66,7 +67,7 @@ class _SignupContentState extends State<SignupContent> {
                     Expanded(
                       child: TextFieldWidget(
                         hint: "First Name",
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.name,
                         onChange: (changedValue) => {
                           widget.signupVM.fieldUpdate(
                               changedValue,
@@ -80,7 +81,7 @@ class _SignupContentState extends State<SignupContent> {
                     Expanded(
                       child: TextFieldWidget(
                         hint: "Last Name",
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.name,
                         onChange: (changedValue) => {
                           widget.signupVM.fieldUpdate(
                               changedValue,
@@ -105,7 +106,7 @@ class _SignupContentState extends State<SignupContent> {
                 ),
                 TextFieldWidget(
                   hint: "Password at least 6 characters",
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.text,
                   onChange: (changedValue) => {
                     widget.signupVM.fieldUpdate(changedValue,
                         widget.signupVM.passwordController, (newValue) => {})
@@ -149,8 +150,14 @@ class _SignupContentState extends State<SignupContent> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
-                onTap: () => {},
-                child: const Text(
+                onTap: () {
+                  showCupertinoModalBottomSheet(
+                    context: context,
+                    expand: true,
+                    builder: (context) => TermsSheetView(),
+                  );
+                },
+                child: Text(
                   "Terms and conditions",
                   maxLines: 1,
                   style: TextStyle(

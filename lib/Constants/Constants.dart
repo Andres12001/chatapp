@@ -9,6 +9,7 @@ const kSecondaryColor = Colors.blueGrey;
 const kTextColor = Color(0xFF023047);
 const kTextLightColor = Color(0xFF747474);
 const kBlueColor = Color(0xFF40BAD5);
+const kTabBGColor = Color.fromARGB(255, 255, 253, 253);
 
 //avatars colors
 const defaultPlaceholderColor = Color.fromARGB(255, 231, 231, 231);

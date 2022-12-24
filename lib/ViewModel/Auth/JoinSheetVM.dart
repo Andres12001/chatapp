@@ -13,8 +13,9 @@ import '../../Constants/FirebaseMessages.dart';
 import '../../Helpers/FirebaseAuthMethods.dart';
 import '../../Helpers/ListenedValues.dart';
 
-class LoginVM {
-  TextEditingController emailController = TextEditingController();
+class JoinSheetVM {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController codeController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   FirebaseAuthMethods _firebaseAuthMethods = FirebaseAuthMethods();
 

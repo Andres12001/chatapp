@@ -34,7 +34,7 @@ class TextFieldWidget extends StatelessWidget {
               maxLines: 1,
               controller: controller,
               obscureText: isObscureText,
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: keyboardType,
               onChanged: (value) => onChange(value),
               decoration:
                   InputDecoration(border: InputBorder.none, hintText: hint),

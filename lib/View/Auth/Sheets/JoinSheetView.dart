@@ -1,20 +1,19 @@
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:first_app/Constants/Constants.dart';
-
-import 'package:first_app/ViewModel/Auth/SignupVM.dart';
+import 'package:first_app/Helpers/ListenedValues.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Helpers/ListenedValues.dart';
-import '../Widgets/SignupContent.dart';
+import '../../../ViewModel/Auth/JoinSheetVM.dart';
+import '../Widgets/JoinSheetContent.dart';
 import '../Widgets/WelcomeHeader.dart';
 
-class SignupView extends StatelessWidget {
-  SignupView({super.key});
-  static const String screenRouteName = "/Signup";
+class JoinSheetView extends StatelessWidget {
+  JoinSheetView({super.key});
+  static const String screenRouteName = "/JoinSheet";
 
-  final SignupVM _signupVM = SignupVM();
+  final JoinSheetVM _joinSheetVM = JoinSheetVM();
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +49,10 @@ class SignupView extends StatelessWidget {
                     //main container
                     WelcomeHeader(
                       size: size,
-                      title: 'Signup',
+                      title: 'Join Meeting',
+                      fontSize: 50,
                     ),
-                    SignupContent(signupVM: _signupVM)
+                    JoinSheetContent(joinSheetVM: _joinSheetVM)
                     //overlay container
                   ]),
                 ),

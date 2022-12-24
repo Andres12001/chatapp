@@ -1,20 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:first_app/ViewModel/Auth/LoginVM.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../Constants/Constants.dart';
 import '../../../Helpers/ListenedValues.dart';
+import '../../../ViewModel/Auth/JoinSheetVM.dart';
 import '../Sheets/TermsSheetView.dart';
 import 'ButtonOriginal.dart';
 import 'TextFieldWidget.dart';
 
-class LoginContent extends StatelessWidget {
-  const LoginContent({super.key, required this.loginVM});
+class JoinSheetContent extends StatelessWidget {
+  const JoinSheetContent({super.key, required this.joinSheetVM});
 
-  final LoginVM loginVM;
+  final JoinSheetVM joinSheetVM;
   @override
   Widget build(BuildContext context) {
     return Consumer<ListenedValues>(builder: (context, updatedData, child) {
@@ -38,56 +38,50 @@ class LoginContent extends StatelessWidget {
                 child: Column(
                   children: [
                     TextFieldWidget(
-                      hint: "example@example.com",
-                      keyboardType: TextInputType.emailAddress,
+                      hint: "Your Name",
+                      keyboardType: TextInputType.name,
                       onChange: (changedValue) => {
-                        loginVM.fieldUpdate(
-                            changedValue, loginVM.emailController)
+                        joinSheetVM.fieldUpdate(
+                            changedValue, joinSheetVM.nameController)
                       },
                       isObscureText: false,
-                      controller: loginVM.emailController,
+                      controller: joinSheetVM.nameController,
                     ),
                     TextFieldWidget(
-                      hint: "Password at least 6 characters",
+                      hint: "Meeting code",
                       keyboardType: TextInputType.text,
                       onChange: (changedValue) => {
-                        loginVM.fieldUpdate(
-                            changedValue, loginVM.passwordController)
+                        joinSheetVM.fieldUpdate(
+                            changedValue, joinSheetVM.codeController)
+                      },
+                      isObscureText: false,
+                      controller: joinSheetVM.codeController,
+                    ),
+                    TextFieldWidget(
+                      hint: "Meeting Password",
+                      keyboardType: TextInputType.text,
+                      onChange: (changedValue) => {
+                        joinSheetVM.fieldUpdate(
+                            changedValue, joinSheetVM.passwordController)
                       },
                       isObscureText: true,
-                      controller: loginVM.passwordController,
+                      controller: joinSheetVM.passwordController,
                     ),
                     ButtonOriginal(
-                      text: "Login",
+                      text: "Join",
                       bgColor: kPrimaryColor,
                       txtColor: Colors.white,
-                      onPress: () => loginVM.loginPre(
+                      onPress: () => joinSheetVM.loginPre(
                           context: context,
-                          email: loginVM.emailController.text,
-                          password: loginVM.passwordController.text),
-                      icon: Icons.login,
+                          email: joinSheetVM.codeController.text,
+                          password: joinSheetVM.passwordController.text),
+                      icon: Icons.join_full,
                       width: 200,
                     )
                   ],
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  onTap: () => loginVM.goToSignup(context),
-                  child: const Text(
-                    "Not a member yet? Signup now",
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                ),
-              ),
-
-              // const Spacer(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(

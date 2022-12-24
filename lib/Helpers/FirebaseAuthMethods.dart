@@ -1,8 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'FirebaseMethods.dart';
+
 class FirebaseAuthMethods {
 // Email Auth
 //Login
+  static String getMyPhoto() {
+    if (myId == null) {
+      return "";
+    }
+
+    return FirebaseAuth.instance.currentUser?.photoURL ?? "";
+  }
+
+  static String getMyname() {
+    if (myId == null) {
+      return "";
+    }
+    return FirebaseAuth.instance.currentUser?.displayName ?? "";
+  }
 
   Future<User?> loginUsingEmailPassword(
       {required String email,

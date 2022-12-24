@@ -81,7 +81,6 @@ class _AvatarCustomState extends State<AvatarCustom> {
                     color: defaultPlaceholderColor,
                     child: const CircularProgressIndicator()),
                 errorWidget: (context, url, error) {
-                  print(error);
                   return Container(
                       color: defaultPlaceholderColor,
                       child: Icon(

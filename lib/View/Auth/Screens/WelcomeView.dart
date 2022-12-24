@@ -24,20 +24,22 @@ class WelcomeView extends StatelessWidget {
       ),
       body: SafeArea(
         bottom: false,
-        child: CustomScrollView(slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(children: [
-              //main container
-              WelcomeHeader(
-                size: size,
-                title: 'Metix',
+        child: CustomScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(children: [
+                  //main container
+                  WelcomeHeader(
+                    size: size,
+                    title: 'Metix',
+                  ),
+                  WelcomeContent(welcomeVM: _welcomeVM)
+                  //overlay container
+                ]),
               ),
-              WelcomeContent(welcomeVM: _welcomeVM)
-              //overlay container
             ]),
-          ),
-        ]),
       ),
     );
   }

@@ -12,11 +12,9 @@ class MainVM {
       myId = user?.uid;
 
       if (user == null) {
-        print('User is currently signed out!');
         performSignout(
             NavigationService.navigatorKey.currentContext ?? context);
       } else {
-        print('User is signed in!');
         FirebaseMethods.onlineControl(true);
       }
     });

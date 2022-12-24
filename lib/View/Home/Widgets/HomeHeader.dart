@@ -2,8 +2,8 @@ import 'package:first_app/Constants/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class WelcomeHeader extends StatelessWidget {
-  WelcomeHeader(
+class HomeHeader extends StatelessWidget {
+  HomeHeader(
       {super.key, required this.size, required this.title, this.fontSize = 60});
   final Size size;
   final String title;

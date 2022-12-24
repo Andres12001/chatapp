@@ -1,9 +1,14 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/ViewModel/Auth/WelcomeVM.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../Screens/LoginView.dart';
 import '../Screens/SignupView.dart';
+import '../Sheets/JoinSheetView.dart';
+import '../Sheets/TermsSheetView.dart';
 import 'ButtonsStretch.dart';
 
 class WelcomeContent extends StatelessWidget {
@@ -59,18 +64,34 @@ class WelcomeContent extends StatelessWidget {
               ),
               ButtonsStretch(
                 text: "Join Meeting",
-                bgColor: kLabelColor,
-                txtColor: kBackgroundColor,
-                onPress: () => welcomeVM.navigationRoute(context, "routeName"),
+                bgColor: kBackgroundColor,
+                txtColor: kPrimaryColor,
+                onPress: () {
+                  showCupertinoModalBottomSheet(
+                    context: context,
+                    expand: true,
+                    builder: (context) => JoinSheetView(),
+                  );
+                },
                 icon: Icons.join_full,
               ),
-              const Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Terms and conditions",
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: kSecondaryColor,
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: () {
+                    showCupertinoModalBottomSheet(
+                      context: context,
+                      expand: true,
+                      builder: (context) => TermsSheetView(),
+                    );
+                  },
+                  child: Text(
+                    "Terms and conditions",
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: kSecondaryColor,
+                    ),
                   ),
                 ),
               ),

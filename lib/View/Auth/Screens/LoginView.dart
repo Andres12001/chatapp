@@ -40,20 +40,22 @@ class LoginView extends StatelessWidget {
         color: Colors.black87,
         child: SafeArea(
           bottom: false,
-          child: CustomScrollView(slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Column(children: [
-                //main container
-                WelcomeHeader(
-                  size: size,
-                  title: 'Login',
+          child: CustomScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(children: [
+                    //main container
+                    WelcomeHeader(
+                      size: size,
+                      title: 'Login',
+                    ),
+                    LoginContent(loginVM: _loginVM)
+                    //overlay container
+                  ]),
                 ),
-                LoginContent(loginVM: _loginVM)
-                //overlay container
               ]),
-            ),
-          ]),
         ),
       ),
     );

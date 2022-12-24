@@ -22,7 +22,7 @@ class ButtonsStretch extends StatelessWidget {
         child: Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-          elevation: 7,
+          elevation: 10,
           color: bgColor,
           child: ListTile(
             title: Text(

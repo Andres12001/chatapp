@@ -1,6 +1,6 @@
 class FirebaseMessages {
   static String getMessageFromErrorCode(dynamic e) {
-    switch (e.errorCode) {
+    switch (e.code) {
       case "ERROR_EMAIL_ALREADY_IN_USE":
       case "account-exists-with-different-credential":
       case "email-already-in-use":

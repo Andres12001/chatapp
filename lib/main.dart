@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Helpers/ListenedValues.dart';
+import 'package:first_app/View/Auth/Sheets/TermsSheetView.dart';
+import 'package:first_app/View/Auth/Widgets/JoinSheetContent.dart';
 import 'package:first_app/View/Home/Screens/HomeView.dart';
 import 'package:first_app/ViewModel/MainVM.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'Helpers/NavigationService.dart';
 import 'View/Auth/Screens/LoginView.dart';
 import 'View/Auth/Screens/SignupView.dart';
 import 'View/Auth/Screens/WelcomeView.dart';
+import 'View/Auth/Sheets/JoinSheetView.dart';
 import 'firebase_options.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
 
@@ -70,6 +73,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               LoginView.screenRouteName: (context) => LoginView(),
               SignupView.screenRouteName: (context) => SignupView(),
               HomeView.screenRouteName: (context) => HomeView(),
+              JoinSheetView.screenRouteName: (context) => JoinSheetView(),
+              TermsSheetView.screenRouteName: (context) => TermsSheetView(),
             },
           ),
         ));

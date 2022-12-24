@@ -9,6 +9,8 @@ import 'package:first_app/View/Auth/Screens/LoginView.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import '../../Constants/FirebaseConst.dart';
 import '../../Constants/FirebaseMessages.dart';
@@ -40,11 +42,21 @@ class SignupVM {
       required String nameF,
       required String nameL}) {
     if (nameF.trim().isEmpty || nameL.trim().isEmpty || email.trim().isEmpty) {
-      print("Please fill all fields");
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Oops...',
+        text: "Please fill all fields",
+      );
       return;
     }
     if (password.trim().length > 6) {
-      print("Please enter password contains at least 6 char");
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Oops...',
+        text: "Please enter password contains at least 6 char",
+      );
       return;
     }
     Provider.of<ListenedValues>(context, listen: false).setLoading(true);
@@ -58,7 +70,12 @@ class SignupVM {
         },
         onFailed: (e) {
           Provider.of<ListenedValues>(context, listen: false).setLoading(false);
-          print(e);
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            title: 'Oops...',
+            text: FirebaseMessages.getMessageFromErrorCode(e),
+          );
         });
   }
 
@@ -84,7 +101,6 @@ class SignupVM {
       String nameF, String nameL, String? ava) async {
     await FirebaseAuth.instance.currentUser?.updateDisplayName("$nameF $nameL");
     await FirebaseAuth.instance.currentUser?.updatePhotoURL(ava ?? "");
-    print(id);
     _firebaseMethods.setDataInFirebase(
         childPath: "${FirebaseConst.USERS}/$id",
         map: UserDic.createUserMap(loginInfo, id, ios, nameF, nameL, ava),

@@ -48,8 +48,6 @@ class FirebaseMethods {
           .putData(await file.readAsBytes(), newMetadata);
 
       String url = await (await uploadTask).ref.getDownloadURL();
-      print(url);
-
       onSucc(url);
     } on FirebaseException catch (e) {
       onFailed(e);
