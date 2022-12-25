@@ -12,8 +12,16 @@ class UserDic {
       "nameL": nameL,
       "online": true,
       "statue": "Hello , I'm using metix from Swirl code",
-      "typing": "",
+      "meetingId": "",
       "verify": false
+    };
+
+    return map;
+  }
+
+  static Map<String, dynamic> updateUserRoomId(String meetingId) {
+    Map<String, dynamic> map = {
+      "meetingId": meetingId,
     };
 
     return map;

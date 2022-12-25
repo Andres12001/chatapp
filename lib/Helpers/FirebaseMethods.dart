@@ -20,8 +20,46 @@ class FirebaseMethods {
 
     DatabaseReference ref = FirebaseDatabase.instance.ref();
     try {
-      await ref.child(childPath).set(map);
+      await ref.child(childPath).update(map).catchError((onError) {
+        print(onError);
+      });
       onSucc();
+    } catch (e) {
+      onFailed(e);
+    }
+  }
+
+  void setValueInFirebase(
+      {required String childPath,
+      required dynamic value,
+      required Function onSucc,
+      required Function(dynamic) onFailed}) async {
+    if (myId == null) {
+      return;
+    }
+
+    DatabaseReference ref = FirebaseDatabase.instance.ref();
+    try {
+      await ref.child(childPath).set(value);
+      onSucc();
+    } catch (e) {
+      onFailed(e);
+    }
+  }
+
+  //single listner on databaseR
+  void getSingleDataFromFirebase(
+      {required String childPath,
+      required Function(DataSnapshot snapshot) onSucc,
+      required Function(dynamic) onFailed}) async {
+    if (myId == null) {
+      return;
+    }
+
+    DatabaseReference ref = FirebaseDatabase.instance.ref();
+    try {
+      final snapshot = await ref.child(childPath).get();
+      onSucc(snapshot);
     } catch (e) {
       onFailed(e);
     }

@@ -66,7 +66,7 @@ class SignupVM {
         email: email,
         password: password,
         onSucc: (user) {
-          uploadAva(context, email, user!.uid, true, nameF, nameL);
+          uploadAva(context, email, user!.uid, false, nameF, nameL);
         },
         onFailed: (e) {
           Provider.of<ListenedValues>(context, listen: false).setLoading(false);

@@ -1,17 +1,20 @@
 import 'package:first_app/View/Home/Widgets/HomeArc.dart';
 import 'package:first_app/ViewModel/Home/HomeVM.dart';
 import 'package:flutter/material.dart';
-
 import '../../../Constants/Constants.dart';
+import '../../../Models/Meeting.dart';
+import '../../../ViewModel/Meeting/MeetingVM.dart';
 import '../../Auth/Widgets/ButtonOriginal.dart';
 import 'HomeRow.dart';
 
 class HomeContent extends StatelessWidget {
-  const HomeContent(
+  HomeContent(
       {super.key, required this.homeVM, required this.scrollController});
 
   final HomeVM homeVM;
   final ScrollController scrollController;
+  final MeetingVM _meetingVM = MeetingVM.shared;
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -30,7 +33,6 @@ class HomeContent extends StatelessWidget {
                       contentWidget: HomeRow(
                         scrollController: scrollController,
                       )),
-                  Text("hello"),
                   ButtonOriginal(
                       text: "signout",
                       bgColor: kPrimaryColor,
@@ -38,12 +40,21 @@ class HomeContent extends StatelessWidget {
                       onPress: () => homeVM.signout(context),
                       icon: Icons.person,
                       width: 200),
-                  // HomeHeader(
-                  //   size: size,
-                  //   title: 'Login',
-                  // ),
-                  //LoginContent(loginVM: _loginVM)
-                  //overlay container
+
+                  ButtonOriginal(
+                      text: "call",
+                      bgColor: kPrimaryColor,
+                      txtColor: Colors.white,
+                      onPress: () => _meetingVM.createMeeting(
+                          context: context,
+                          meetingTitle: "Test",
+                          password: "123456",
+                          isPrivate: true,
+                          started: true,
+                          meetingType: MeetingLocalTypes.groupVideoCall.index,
+                          meetingState: MeetingStateTypes.active.index),
+                      icon: Icons.call,
+                      width: 200),
                 ]),
               ),
             ),
