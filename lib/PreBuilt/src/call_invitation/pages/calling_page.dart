@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:first_app/Models/Meeting.dart';
 import 'package:first_app/PreBuilt/src/prebuilt_call.dart';
 import 'package:first_app/PreBuilt/src/prebuilt_call_config.dart';
 import 'package:first_app/ViewModel/Meeting/MeetingVM.dart';
@@ -148,10 +149,11 @@ class ZegoCallingPageState extends State<ZegoCallingPage> {
       userName: pageManager.userName,
       tokenServerUrl: pageManager.tokenServerUrl,
       config: callConfig!,
-      onDispose: () {
+      onDispose: (endRoom) {
         pageManager.onPrebuiltCallPageDispose();
       },
       meetingVM: MeetingVM.shared,
+      adminID: MeetingVM.shared.adminId,
     );
   }
 }

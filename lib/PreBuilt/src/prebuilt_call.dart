@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'dart:core';
 
 // Flutter imports:
+import 'package:firebase_core/firebase_core.dart';
+import 'package:first_app/Constants/FirebaseConst.dart';
+import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +33,7 @@ class ZegoUIKitPrebuiltCall extends StatefulWidget {
     this.tokenServerUrl = '',
     this.onDispose,
     required this.meetingVM,
+    required this.adminID,
   }) : super(key: key);
 
   /// you need to fill in the appID you obtained from console.zegocloud.com
@@ -38,6 +42,9 @@ class ZegoUIKitPrebuiltCall extends StatefulWidget {
   /// You can customize the callID arbitrarily,
   /// just need to know: users who use the same callID can talk with each other.
   final String callID;
+
+//meeting admin
+  final String adminID;
 
   /// for Android/iOS
   /// you need to fill in the appID you obtained from console.zegocloud.com
@@ -62,7 +69,7 @@ class ZegoUIKitPrebuiltCall extends StatefulWidget {
 
   final ZegoUIKitPrebuiltCallConfig config;
 
-  final VoidCallback? onDispose;
+  final Function(bool endRoom)? onDispose;
 
   //local
   final MeetingVM meetingVM;
@@ -99,9 +106,8 @@ class _ZegoUIKitPrebuiltCallState extends State<ZegoUIKitPrebuiltCall>
     userListStreamSubscription?.cancel();
 
     await ZegoUIKit().leaveRoom();
-    // await ZegoUIKit().uninit();
 
-    widget.onDispose?.call();
+    widget.onDispose?.call(ZegoUIKit().getRemoteUsers().isEmpty);
   }
 
   @override
@@ -168,9 +174,8 @@ class _ZegoUIKitPrebuiltCallState extends State<ZegoUIKitPrebuiltCall>
               ..turnMicrophoneOn(config.turnOnMicrophoneWhenJoining)
               ..setAudioOutputToSpeaker(config.useSpeakerWhenJoining)
               ..joinRoom(widget.callID).whenComplete(() {
-                //firebase join room
-                //add room to active and started if myid == adminid
-                //add from user > roomid for all users
+                //  Firebase check if meeting ended listner
+                MeetingVM.shared.afterJoinMeeting(context);
               });
           });
         });
@@ -206,16 +211,10 @@ class _ZegoUIKitPrebuiltCallState extends State<ZegoUIKitPrebuiltCall>
   }
 
   void onUserLeave(List<ZegoUIKitUser> users) {
-    //firebase leave room
-    //remove from user > roomid for all users
-    print("useeeer leaveeed");
-    for (var user in users) {
-      print(user.id);
-      print(user.inRoomAttributes);
-    }
     if (ZegoUIKit().getRemoteUsers().isEmpty) {
       //  remote users is empty
       widget.config.onOnlySelfInRoom?.call(context);
+      return;
     }
   }
 

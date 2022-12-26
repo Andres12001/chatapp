@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,6 +10,7 @@ String? myId = FirebaseAuth.instance.currentUser?.uid;
 class FirebaseMethods {
   //Database
 
+  static Map<String, StreamSubscription<DatabaseEvent>?> listnersMap = {};
   //set data in database
   void setDataInFirebase(
       {required String childPath,
@@ -19,14 +22,12 @@ class FirebaseMethods {
     }
 
     DatabaseReference ref = FirebaseDatabase.instance.ref();
-    try {
-      await ref.child(childPath).update(map).catchError((onError) {
-        print(onError);
-      });
+
+    await ref.child(childPath).update(map).then((value) {
       onSucc();
-    } catch (e) {
-      onFailed(e);
-    }
+    }).catchError((onError) {
+      onFailed(onError.toString());
+    });
   }
 
   void setValueInFirebase(
@@ -39,12 +40,11 @@ class FirebaseMethods {
     }
 
     DatabaseReference ref = FirebaseDatabase.instance.ref();
-    try {
-      await ref.child(childPath).set(value);
+    await ref.child(childPath).set(value).then((value) {
       onSucc();
-    } catch (e) {
-      onFailed(e);
-    }
+    }).catchError((onError) {
+      onFailed(onError.toString());
+    });
   }
 
   //single listner on databaseR
@@ -57,42 +57,38 @@ class FirebaseMethods {
     }
 
     DatabaseReference ref = FirebaseDatabase.instance.ref();
+
+    await ref.child(childPath).get().then((value) {
+      onSucc(value);
+    }).catchError((onError) {
+      onFailed(onError);
+    });
+  }
+
+//event listner on databse
+  void getListnerOnData(
+      {required String childPath,
+      required Function(dynamic snapshot) onSucc,
+      required String listnerMapkey,
+      required Function(dynamic) onFailed}) async {
+    if (myId == null) {
+      return;
+    }
+
+    DatabaseReference ref = FirebaseDatabase.instance.ref();
     try {
-      final snapshot = await ref.child(childPath).get();
-      onSucc(snapshot);
+      var stream = ref.child(childPath).onValue.listen(
+        (event) {
+          onSucc(event.snapshot);
+        },
+      );
+      FirebaseMethods.listnersMap[listnerMapkey] = stream;
     } catch (e) {
       onFailed(e);
     }
   }
 
-//Storage
-
-//upload photo
-  void uploadPhotoStorage(
-      {required String childPath,
-      required dynamic file,
-      required Function(String) onSucc,
-      required Function(dynamic) onFailed}) async {
-    if (myId == null) {
-      return;
-    }
-    final storageRef = FirebaseStorage.instance.ref();
-    final newMetadata = SettableMetadata(
-      contentType: "image/jpeg",
-    );
-    try {
-      UploadTask uploadTask = storageRef
-          .child(childPath + "/${myId!}.jpg")
-          .putData(await file.readAsBytes(), newMetadata);
-
-      String url = await (await uploadTask).ref.getDownloadURL();
-      onSucc(url);
-    } on FirebaseException catch (e) {
-      onFailed(e);
-    }
-  }
-
-//Online method
+  //Online method
   static void onlineControl(bool online) {
     if (myId == null) {
       return;
@@ -120,5 +116,32 @@ class FirebaseMethods {
       "typing": ""
     };
     ref.child(FirebaseConst.USERS).child(myId!).onDisconnect().update(map);
+  }
+
+//Storage
+
+//upload photo
+  void uploadPhotoStorage(
+      {required String childPath,
+      required dynamic file,
+      required Function(String) onSucc,
+      required Function(dynamic) onFailed}) async {
+    if (myId == null) {
+      return;
+    }
+    final storageRef = FirebaseStorage.instance.ref();
+    final newMetadata = SettableMetadata(
+      contentType: "image/jpeg",
+    );
+    try {
+      UploadTask uploadTask = storageRef
+          .child(childPath + "/${myId!}.jpg")
+          .putData(await file.readAsBytes(), newMetadata);
+
+      String url = await (await uploadTask).ref.getDownloadURL();
+      onSucc(url);
+    } on FirebaseException catch (e) {
+      onFailed(e);
+    }
   }
 }

@@ -5,15 +5,12 @@ import 'package:first_app/ViewModel/Meeting/MeetingVM.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+import '../../Constants/FirebaseConst.dart';
 import '../../PreBuilt/zego_uikit_prebuilt_call.dart';
 
 class MeetingView extends StatelessWidget {
-  const MeetingView(
-      {Key? key, required this.meetingId, required this.meetingType})
-      : super(key: key);
+  const MeetingView({Key? key}) : super(key: key);
   static const String screenRouteName = "/Meeting";
-  final String meetingId;
-  final ZegoUIKitPrebuiltCallConfig meetingType;
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +26,24 @@ class MeetingView extends StatelessWidget {
         userID: myId ?? "",
         tokenServerUrl: kIsWeb ? ZegoConstants.tokenServerUrl : "",
         userName: FirebaseAuth.instance.currentUser?.displayName ?? "Guest",
-        callID: meetingId,
+        callID: MeetingVM.shared.meetingId,
         // You can also use groupVideo/groupVoice/oneOnOneVoice to make more types of calls.
-        config: meetingType
-          ..avatarBuilder = (context, size, user, extraInfo) {
-            return Image.asset("images/welcome.png");
-          }
+        config: MeetingVM.shared.meetingType
           ..onOnlySelfInRoom = (context) {
-            //firebase compelete room
-            //remove from user > roomid for all users
-            //make it as ended
-            Navigator.of(context).pop();
+            MeetingVM.shared.leaveMeeting(
+                endRoom: true,
+                context: context,
+                onComp: () {
+                  Navigator.of(context).pop();
+                });
           },
-        meetingVM: MeetingVM.shared,
+        onDispose: (endRoom) {
+          FirebaseMethods.listnersMap[FirebaseConst.LISTNER_MEETING_END]
+              ?.cancel();
+          MeetingVM.shared
+              .leaveMeeting(endRoom: endRoom, context: context, onComp: () {});
+        },
+        meetingVM: MeetingVM.shared, adminID: MeetingVM.shared.adminId,
       ),
     );
   }

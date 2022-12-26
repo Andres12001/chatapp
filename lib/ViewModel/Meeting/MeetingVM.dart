@@ -19,6 +19,7 @@ class MeetingVM {
   var uuid = const Uuid();
   final FirebaseMethods _firebaseMethods = FirebaseMethods();
   String meetingId = '';
+  String adminId = '';
   ZegoUIKitPrebuiltCallConfig meetingType =
       ZegoUIKitPrebuiltCallConfig.groupVoiceCall();
 
@@ -69,6 +70,7 @@ class MeetingVM {
                 map: map,
                 onSucc: () {
                   this.meetingId = generatedMeetingId;
+                  this.adminId = myId!;
                   this.meetingType = Meeting.getMeetingType(meetingType);
                   Provider.of<ListenedValues>(context, listen: false)
                       .setLoading(false);
@@ -134,6 +136,192 @@ class MeetingVM {
                       });
                 });
           }
+        },
+        onFailed: (e) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            title: 'Oops...',
+            text: e,
+          );
+        });
+  }
+
+//i will start here
+  void joinRoom(
+      {required BuildContext context,
+      required String? meetingTitle,
+      required String password,
+      required bool isPrivate,
+      required bool started,
+      required int meetingType,
+      required int meetingState}) {
+    if (myId == null) {
+      return;
+    }
+    Provider.of<ListenedValues>(context, listen: false).setLoading(true);
+
+    _firebaseMethods.getSingleDataFromFirebase(
+        childPath: "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}",
+        onSucc: (snapshot) {
+          late String inRoom;
+
+          if (snapshot.value is! String) {
+            inRoom = "";
+          } else {
+            inRoom = snapshot.value as String;
+          }
+
+          if (inRoom.isEmpty) {
+            final generatedMeetingId = uuid.v1().toString();
+
+            Map<String, dynamic> map = {
+              "${FirebaseConst.MEETINGS}/$generatedMeetingId":
+                  MeetingDic.createMeetingMap(
+                      meetingTitle,
+                      password,
+                      myId!,
+                      generatedMeetingId,
+                      isPrivate,
+                      started,
+                      meetingType,
+                      meetingState),
+              "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}":
+                  generatedMeetingId
+            };
+
+            _firebaseMethods.setDataInFirebase(
+                childPath: "/",
+                map: map,
+                onSucc: () {
+                  this.meetingId = generatedMeetingId;
+                  this.adminId = myId!;
+                  this.meetingType = Meeting.getMeetingType(meetingType);
+                  Provider.of<ListenedValues>(context, listen: false)
+                      .setLoading(false);
+                  kIsWeb
+                      ? uni.window.navigator //for web only
+                          .getUserMedia(audio: true, video: true)
+                          .then((value) {
+                          Navigator.pushNamed(
+                              context, MeetingView.screenRouteName);
+                        })
+                      : Navigator.pushNamed(context,
+                          MeetingView.screenRouteName); //for Android and iOS
+                },
+                onFailed: (e) {
+                  Provider.of<ListenedValues>(context, listen: false)
+                      .setLoading(false);
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.error,
+                    title: 'Oops...',
+                    text: e,
+                  );
+                });
+          } else {
+            Provider.of<ListenedValues>(context, listen: false)
+                .setLoading(false);
+            QuickAlert.show(
+                context: context,
+                type: QuickAlertType.error,
+                title: 'Oops...',
+                text:
+                    "You are already in meeting you can't create meeting until you leave the other meeting.",
+                confirmBtnColor: kPrimaryColor,
+                confirmBtnText: "Leave Meeting",
+                onConfirmBtnTap: () {
+                  Provider.of<ListenedValues>(context, listen: false)
+                      .setLoading(true);
+                  _firebaseMethods.setValueInFirebase(
+                      childPath:
+                          "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}",
+                      value: "",
+                      onSucc: () {
+                        Navigator.pop(context);
+                        createMeeting(
+                            context: context,
+                            meetingTitle: meetingTitle,
+                            password: password,
+                            isPrivate: isPrivate,
+                            started: started,
+                            meetingType: meetingType,
+                            meetingState: meetingState);
+                      },
+                      onFailed: (e) {
+                        Navigator.pop(context);
+                        Provider.of<ListenedValues>(context, listen: false)
+                            .setLoading(false);
+                        QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.error,
+                          title: 'Oops...',
+                          text: e,
+                        );
+                      });
+                });
+          }
+        },
+        onFailed: (e) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            title: 'Oops...',
+            text: e,
+          );
+        });
+  }
+
+  void afterJoinMeeting(BuildContext context) {
+    if (myId == null) {
+      return;
+    }
+    FirebaseMethods firebaseMethods = FirebaseMethods();
+
+    firebaseMethods.getListnerOnData(
+      childPath:
+          "/${FirebaseConst.MEETINGS}/${this.meetingId}/${FirebaseConst.MEETING_STATE}",
+      listnerMapkey: FirebaseConst.LISTNER_MEETING_END,
+      onSucc: (snapshot) {
+        late MeetingStateTypes meetingState;
+
+        if (snapshot.value is! int) {
+          meetingState = MeetingStateTypes.ended;
+        } else {
+          meetingState = MeetingStateTypes.values[snapshot.value as int];
+        }
+        if (meetingState == MeetingStateTypes.ended) {
+          Navigator.pop(context);
+        }
+      },
+      onFailed: (error) {},
+    );
+  }
+
+  void leaveMeeting(
+      {required bool endRoom,
+      required BuildContext context,
+      required Function onComp}) {
+    if (myId == null) {
+      return;
+    }
+    FirebaseMethods.listnersMap[FirebaseConst.LISTNER_MEETING_END]?.cancel();
+    Map<String, dynamic> map = {
+      "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}": ""
+    };
+
+    if (endRoom) {
+      map["${FirebaseConst.MEETINGS}/$meetingId/${FirebaseConst.MEETING_STATE}"] =
+          MeetingStateTypes.ended.index;
+    }
+
+    _firebaseMethods.setDataInFirebase(
+        childPath: "/",
+        map: map,
+        onSucc: () {
+          this.meetingId = "";
+          this.adminId = "";
+          onComp();
         },
         onFailed: (e) {
           QuickAlert.show(

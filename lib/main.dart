@@ -74,10 +74,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               LoginView.screenRouteName: (context) => LoginView(),
               SignupView.screenRouteName: (context) => SignupView(),
               HomeView.screenRouteName: (context) => HomeView(),
-              MeetingView.screenRouteName: (context) => MeetingView(
-                    meetingId: _meetingVM.meetingId,
-                    meetingType: _meetingVM.meetingType,
-                  ),
+              MeetingView.screenRouteName: (context) => MeetingView(),
               JoinSheetView.screenRouteName: (context) => JoinSheetView(),
               TermsSheetView.screenRouteName: (context) => TermsSheetView(),
             },
