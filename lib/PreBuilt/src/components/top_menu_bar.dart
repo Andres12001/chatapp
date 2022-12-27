@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zego_uikit/zego_uikit.dart';
 
 // Project imports:
+import '../../../ViewModel/Meeting/MeetingVM.dart';
 import 'assets.dart';
 import 'member/member_list_button.dart';
 
@@ -24,7 +25,7 @@ class ZegoTopMenuBar extends StatefulWidget {
   final double? height;
   final double? borderRadius;
   final Color? backgroundColor;
-
+  final String meetingTitle;
   const ZegoTopMenuBar({
     Key? key,
     required this.config,
@@ -35,6 +36,7 @@ class ZegoTopMenuBar extends StatefulWidget {
     this.height,
     this.borderRadius,
     this.backgroundColor,
+    required this.meetingTitle,
   }) : super(key: key);
 
   @override
@@ -80,8 +82,20 @@ class _ZegoTopMenuBarState extends State<ZegoTopMenuBar> {
         ),
         child: Row(
           children: [
-            title(),
+            // title(),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                widget.meetingTitle,
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
             Expanded(child: Container()),
+            Text(
+              MeetingVM.shared.meetingId,
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
             rightBar(),
           ],
         ),

@@ -1,8 +1,9 @@
+import 'package:first_app/View/Meeting/Sheets/CreateSheetView.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../Constants/Constants.dart';
-import '../../Auth/Sheets/JoinSheetView.dart';
+import '../../Meeting/Sheets/JoinSheetView.dart';
 import 'HomeMainButton.dart';
 
 class HomeRow extends StatelessWidget {
@@ -34,7 +35,13 @@ class HomeRow extends StatelessWidget {
                 icon: Icons.add_circle,
                 text: "Create Meeting",
                 txtColor: kPrimaryColor,
-                onPress: (() {})),
+                onPress: (() {
+                  showCupertinoModalBottomSheet(
+                    context: context,
+                    expand: true,
+                    builder: (context) => CreateSheetView(),
+                  );
+                })),
             HomeMainButton(
                 bgColor: Colors.white,
                 icon: Icons.calendar_month,

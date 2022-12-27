@@ -7,6 +7,7 @@ class TextFieldWidget extends StatelessWidget {
       required this.hint,
       required this.keyboardType,
       required this.onChange,
+      this.limitTextCount = 0,
       required this.isObscureText,
       required this.controller});
   final String hint;
@@ -14,6 +15,7 @@ class TextFieldWidget extends StatelessWidget {
   final Function(String) onChange;
   final bool isObscureText;
   final TextEditingController controller;
+  final int limitTextCount;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -29,6 +31,8 @@ class TextFieldWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TextField(
+              maxLength:
+                  limitTextCount > 0 ? limitTextCount : TextField.noMaxLength,
               autofocus: true,
               textAlign: TextAlign.start,
               maxLines: 1,
@@ -36,8 +40,8 @@ class TextFieldWidget extends StatelessWidget {
               obscureText: isObscureText,
               keyboardType: keyboardType,
               onChanged: (value) => onChange(value),
-              decoration:
-                  InputDecoration(border: InputBorder.none, hintText: hint),
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: hint, counterText: ''),
             ),
           ),
         ),

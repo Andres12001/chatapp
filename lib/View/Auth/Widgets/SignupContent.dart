@@ -67,6 +67,7 @@ class _SignupContentState extends State<SignupContent> {
                     Expanded(
                       child: TextFieldWidget(
                         hint: "First Name",
+                        limitTextCount: 15,
                         keyboardType: TextInputType.name,
                         onChange: (changedValue) => {
                           widget.signupVM.fieldUpdate(
@@ -81,6 +82,7 @@ class _SignupContentState extends State<SignupContent> {
                     Expanded(
                       child: TextFieldWidget(
                         hint: "Last Name",
+                        limitTextCount: 15,
                         keyboardType: TextInputType.name,
                         onChange: (changedValue) => {
                           widget.signupVM.fieldUpdate(

@@ -2,7 +2,7 @@ import 'package:first_app/Constants/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../Widgets/JoinSheetContent.dart';
+import '../../Meeting/Sheets/JoinSheetContent.dart';
 import '../Widgets/WelcomeHeader.dart';
 
 class TermsSheetView extends StatelessWidget {

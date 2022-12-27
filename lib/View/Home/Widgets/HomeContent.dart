@@ -40,21 +40,6 @@ class HomeContent extends StatelessWidget {
                       onPress: () => homeVM.signout(context),
                       icon: Icons.person,
                       width: 200),
-
-                  ButtonOriginal(
-                      text: "call",
-                      bgColor: kPrimaryColor,
-                      txtColor: Colors.white,
-                      onPress: () => _meetingVM.createMeeting(
-                          context: context,
-                          meetingTitle: "Test",
-                          password: "123456",
-                          isPrivate: true,
-                          started: true,
-                          meetingType: MeetingLocalTypes.groupVideoCall.index,
-                          meetingState: MeetingStateTypes.active.index),
-                      icon: Icons.call,
-                      width: 200),
                 ]),
               ),
             ),

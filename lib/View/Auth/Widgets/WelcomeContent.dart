@@ -7,7 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../Screens/LoginView.dart';
 import '../Screens/SignupView.dart';
-import '../Sheets/JoinSheetView.dart';
+import '../../Meeting/Sheets/JoinSheetView.dart';
 import '../Sheets/TermsSheetView.dart';
 import 'ButtonsStretch.dart';
 

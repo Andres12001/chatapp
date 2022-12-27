@@ -6,10 +6,10 @@ import 'package:provider/provider.dart';
 
 import '../../../../Constants/Constants.dart';
 import '../../../Helpers/ListenedValues.dart';
-import '../../../ViewModel/Auth/JoinSheetVM.dart';
-import '../Sheets/TermsSheetView.dart';
-import 'ButtonOriginal.dart';
-import 'TextFieldWidget.dart';
+import '../../../ViewModel/Meeting/JoinSheetVM.dart';
+import '../../Auth/Sheets/TermsSheetView.dart';
+import '../../Auth/Widgets/ButtonOriginal.dart';
+import '../../Auth/Widgets/TextFieldWidget.dart';
 
 class JoinSheetContent extends StatelessWidget {
   const JoinSheetContent({super.key, required this.joinSheetVM});

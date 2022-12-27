@@ -1,5 +1,6 @@
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:first_app/Constants/Constants.dart';
+import 'package:first_app/View/Home/Widgets/HistoryContent.dart';
 import 'package:first_app/ViewModel/Home/HomeVM.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,7 +45,7 @@ class _HomeViewState extends State<HomeView> {
         homeVM: widget._homeVM,
         scrollController: widget.scrollController,
       ),
-      Text("2"),
+      HistoryContent(),
       Text("3"),
       Text("4"),
     ];

@@ -29,6 +29,7 @@ class ZegoUIKitPrebuiltCall extends StatefulWidget {
     required this.callID,
     required this.userID,
     required this.userName,
+    required this.meetingTitle,
     required this.config,
     this.tokenServerUrl = '',
     this.onDispose,
@@ -43,6 +44,7 @@ class ZegoUIKitPrebuiltCall extends StatefulWidget {
   /// just need to know: users who use the same callID can talk with each other.
   final String callID;
 
+  final String meetingTitle;
 //meeting admin
   final String adminID;
 
@@ -333,6 +335,7 @@ class _ZegoUIKitPrebuiltCallState extends State<ZegoUIKitPrebuiltCall>
         height: 88.r,
         backgroundColor:
             isLightStyle ? null : ZegoUIKitDefaultTheme.viewBackgroundColor,
+        meetingTitle: widget.meetingTitle,
       ),
     );
   }

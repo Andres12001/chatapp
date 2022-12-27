@@ -10,7 +10,6 @@ class MainVM {
   void authStream(BuildContext context) {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       myId = user?.uid;
-
       if (user == null) {
         performSignout(
             NavigationService.navigatorKey.currentContext ?? context);

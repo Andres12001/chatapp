@@ -27,6 +27,8 @@ class JoinSheetVM {
   }
 
   void checkName() {
+    // codeController.text = "4ddbab20-84f1-11ed-abe7-3555e7df4320";
+
     if (myId == null) {
       nameController.text = "Guest";
       return;

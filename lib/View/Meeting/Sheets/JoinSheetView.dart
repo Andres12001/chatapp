@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../ViewModel/Auth/JoinSheetVM.dart';
-import '../Widgets/JoinSheetContent.dart';
-import '../Widgets/WelcomeHeader.dart';
+import '../../../ViewModel/Meeting/JoinSheetVM.dart';
+import 'JoinSheetContent.dart';
+import '../../Auth/Widgets/WelcomeHeader.dart';
 
 class JoinSheetView extends StatelessWidget {
   JoinSheetView({super.key});

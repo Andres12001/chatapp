@@ -154,6 +154,7 @@ class ZegoCallingPageState extends State<ZegoCallingPage> {
       },
       meetingVM: MeetingVM.shared,
       adminID: MeetingVM.shared.adminId,
+      meetingTitle: MeetingVM.shared.meetingTitle,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Constants/FirebaseConst.dart';
+import 'package:first_app/Constants/MainConstants.dart';
 import 'package:first_app/Dics/MeetingDic.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/Models/Meeting.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
-import 'package:uuid/uuid.dart';
 import '../../Helpers/ListenedValues.dart';
 import '../../PreBuilt/zego_uikit_prebuilt_call.dart';
 import 'package:universal_html/html.dart' as uni;
@@ -16,10 +16,11 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 class MeetingVM {
   static final shared = MeetingVM();
-  var uuid = const Uuid();
+  // var uuid = const Uuid();
   final FirebaseMethods _firebaseMethods = FirebaseMethods();
   String meetingId = '';
   String adminId = '';
+  String meetingTitle = '';
   ZegoUIKitPrebuiltCallConfig meetingType =
       ZegoUIKitPrebuiltCallConfig.groupVoiceCall();
 
@@ -48,8 +49,9 @@ class MeetingVM {
           }
 
           if (inRoom.isEmpty) {
-            final generatedMeetingId = uuid.v1().toString();
-
+            //  final generatedMeetingId = uuid.v1().toString();
+            final generatedMeetingId =
+                "${MainConstants.meetingPrefix}-${DateTime.now().millisecondsSinceEpoch}";
             Map<String, dynamic> map = {
               "${FirebaseConst.MEETINGS}/$generatedMeetingId":
                   MeetingDic.createMeetingMap(
@@ -71,7 +73,10 @@ class MeetingVM {
                 onSucc: () {
                   this.meetingId = generatedMeetingId;
                   this.adminId = myId!;
+                  this.meetingTitle = meetingTitle ?? "";
                   this.meetingType = Meeting.getMeetingType(meetingType);
+                  //  Navigator.pop(context);
+
                   Provider.of<ListenedValues>(context, listen: false)
                       .setLoading(false);
                   kIsWeb
@@ -176,18 +181,19 @@ class MeetingVM {
                 childPath: "${FirebaseConst.MEETINGS}/$enteredMeetingId",
                 onSucc: (snapshot) {
                   late Map<String, dynamic> meetingMap;
-                  // if (snapshot.value is! Map<String, dynamic>) {
-                  //   Provider.of<ListenedValues>(context, listen: false)
-                  //       .setLoading(false);
-                  //   QuickAlert.show(
-                  //     context: context,
-                  //     type: QuickAlertType.error,
-                  //     title: 'Oops...',
-                  //     text: "Can't reach the meeting.1",
-                  //   );
-                  //   return;
-                  // }
-                  meetingMap = snapshot.value as Map<String, dynamic>;
+
+                  meetingMap = Map<String, dynamic>.from(snapshot.value as Map);
+                  if (meetingMap is! Map<String, dynamic>) {
+                    Provider.of<ListenedValues>(context, listen: false)
+                        .setLoading(false);
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.error,
+                      title: 'Oops...',
+                      text: "Can't reach the meeting.",
+                    );
+                    return;
+                  }
 
                   var meeting = Meeting.transformMeeting(meetingMap);
                   if (meeting is! Meeting) {
@@ -197,7 +203,7 @@ class MeetingVM {
                       context: context,
                       type: QuickAlertType.error,
                       title: 'Oops...',
-                      text: "Can't reach the meeting.2",
+                      text: "Can't reach the meeting.",
                     );
                     return;
                   }
@@ -224,7 +230,7 @@ class MeetingVM {
                         text: (meeting.meetingState ==
                                 MeetingStateTypes.ended.index)
                             ? "Meeting has been ended"
-                            : "Meeting doesn't start yet");
+                            : "Meeting didn't start yet");
                     return;
                   }
 
@@ -239,10 +245,12 @@ class MeetingVM {
                       onSucc: () {
                         this.meetingId = meeting.meetingId;
                         this.adminId = meeting.adminId;
+                        this.meetingTitle = meeting.meetingTitle;
                         this.meetingType =
                             Meeting.getMeetingType(meeting.meetingType);
                         Provider.of<ListenedValues>(context, listen: false)
                             .setLoading(false);
+                        // Navigator.pop(context);
                         kIsWeb
                             ? uni.window.navigator //for web only
                                 .getUserMedia(audio: true, video: true)
@@ -273,8 +281,7 @@ class MeetingVM {
                     context: context,
                     type: QuickAlertType.error,
                     title: 'Oops...',
-                    text: onFailed.toString(),
-                    // text: "Can't reach the meeting.3",
+                    text: "Can't reach the meeting.",
                   );
                 });
           } else {
@@ -377,6 +384,7 @@ class MeetingVM {
         onSucc: () {
           this.meetingId = "";
           this.adminId = "";
+          this.meetingTitle = "";
           onComp();
         },
         onFailed: (e) {

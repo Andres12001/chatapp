@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first_app/Constants/ZegoConstants.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/ViewModel/Meeting/MeetingVM.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../../Constants/FirebaseConst.dart';
+import '../../Constants/MainConstants.dart';
 import '../../PreBuilt/zego_uikit_prebuilt_call.dart';
 
 class MeetingView extends StatelessWidget {
@@ -17,14 +17,14 @@ class MeetingView extends StatelessWidget {
     return SafeArea(
       bottom: false,
       child: ZegoUIKitPrebuiltCall(
-        appID: ZegoConstants
+        appID: MainConstants
             .appID, // Fill in the appID that you get from ZEGOCLOUD Admin Console.
         appSign: kIsWeb
-            ? ZegoConstants.ServerSecret
-            : ZegoConstants
+            ? MainConstants.ServerSecret
+            : MainConstants
                 .appSign, // Fill in the appSign that you get from ZEGOCLOUD Admin Console.
         userID: myId ?? "",
-        tokenServerUrl: kIsWeb ? ZegoConstants.tokenServerUrl : "",
+        tokenServerUrl: kIsWeb ? MainConstants.tokenServerUrl : "",
         userName: FirebaseAuth.instance.currentUser?.displayName ?? "Guest",
         callID: MeetingVM.shared.meetingId,
         // You can also use groupVideo/groupVoice/oneOnOneVoice to make more types of calls.
@@ -44,6 +44,7 @@ class MeetingView extends StatelessWidget {
               .leaveMeeting(endRoom: endRoom, context: context, onComp: () {});
         },
         meetingVM: MeetingVM.shared, adminID: MeetingVM.shared.adminId,
+        meetingTitle: MeetingVM.shared.meetingTitle,
       ),
     );
   }

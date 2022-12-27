@@ -1,3 +1,4 @@
+import 'package:first_app/View/Meeting/Sheets/CreateSheetView.dart';
 import 'package:floating_bottom_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -5,7 +6,7 @@ import 'dart:developer';
 import '../../../Constants/Constants.dart';
 import '../../../Constants/TabbarConst.dart';
 import '../../../ViewModel/Home/HomeVM.dart';
-import '../../Auth/Sheets/JoinSheetView.dart';
+import '../../Meeting/Sheets/JoinSheetView.dart';
 
 class BottomBarView extends StatelessWidget {
   const BottomBarView({super.key, required this.homeVM});
@@ -69,7 +70,11 @@ class BottomBarView extends StatelessWidget {
                   Icons.add_circle,
                   color: AppColors.white,
                 ),
-                onTap: () => log('Item1'),
+                onTap: () => showCupertinoModalBottomSheet(
+                  context: context,
+                  expand: true,
+                  builder: (context) => CreateSheetView(),
+                ),
               ),
               FloatingCenterButtonChild(
                 child: const Icon(
