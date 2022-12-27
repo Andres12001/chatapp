@@ -60,4 +60,19 @@ class FirebaseAuthMethods {
     }
     return user;
   }
+
+  Future<User?> signInAnonymously(
+      {required Function(User?) onSucc,
+      required Function(dynamic) onFailed}) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+    try {
+      UserCredential userCredential = await auth.signInAnonymously();
+      user = userCredential.user;
+      onSucc(user);
+    } on FirebaseAuthException catch (e) {
+      onFailed(e);
+    }
+    return user;
+  }
 }

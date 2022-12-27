@@ -148,14 +148,13 @@ class MeetingVM {
   }
 
 //i will start here
-  void joinRoom(
-      {required BuildContext context,
-      required String? meetingTitle,
-      required String password,
-      required bool isPrivate,
-      required bool started,
-      required int meetingType,
-      required int meetingState}) {
+  void joinRoom({
+    required BuildContext context,
+    required String userName,
+    required String userId,
+    required String enteredMeetingId,
+    required String password,
+  }) {
     if (myId == null) {
       return;
     }
@@ -172,51 +171,110 @@ class MeetingVM {
             inRoom = snapshot.value as String;
           }
 
-          if (inRoom.isEmpty) {
-            final generatedMeetingId = uuid.v1().toString();
+          if (inRoom.isEmpty || inRoom == enteredMeetingId) {
+            _firebaseMethods.getSingleDataFromFirebase(
+                childPath: "${FirebaseConst.MEETINGS}/$enteredMeetingId",
+                onSucc: (snapshot) {
+                  late Map<String, dynamic> meetingMap;
+                  // if (snapshot.value is! Map<String, dynamic>) {
+                  //   Provider.of<ListenedValues>(context, listen: false)
+                  //       .setLoading(false);
+                  //   QuickAlert.show(
+                  //     context: context,
+                  //     type: QuickAlertType.error,
+                  //     title: 'Oops...',
+                  //     text: "Can't reach the meeting.1",
+                  //   );
+                  //   return;
+                  // }
+                  meetingMap = snapshot.value as Map<String, dynamic>;
 
-            Map<String, dynamic> map = {
-              "${FirebaseConst.MEETINGS}/$generatedMeetingId":
-                  MeetingDic.createMeetingMap(
-                      meetingTitle,
-                      password,
-                      myId!,
-                      generatedMeetingId,
-                      isPrivate,
-                      started,
-                      meetingType,
-                      meetingState),
-              "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}":
-                  generatedMeetingId
-            };
+                  var meeting = Meeting.transformMeeting(meetingMap);
+                  if (meeting is! Meeting) {
+                    Provider.of<ListenedValues>(context, listen: false)
+                        .setLoading(false);
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.error,
+                      title: 'Oops...',
+                      text: "Can't reach the meeting.2",
+                    );
+                    return;
+                  }
 
-            _firebaseMethods.setDataInFirebase(
-                childPath: "/",
-                map: map,
-                onSucc: () {
-                  this.meetingId = generatedMeetingId;
-                  this.adminId = myId!;
-                  this.meetingType = Meeting.getMeetingType(meetingType);
-                  Provider.of<ListenedValues>(context, listen: false)
-                      .setLoading(false);
-                  kIsWeb
-                      ? uni.window.navigator //for web only
-                          .getUserMedia(audio: true, video: true)
-                          .then((value) {
-                          Navigator.pushNamed(
-                              context, MeetingView.screenRouteName);
-                        })
-                      : Navigator.pushNamed(context,
-                          MeetingView.screenRouteName); //for Android and iOS
+                  if (meeting.isPrivate && (meeting.password != password)) {
+                    Provider.of<ListenedValues>(context, listen: false)
+                        .setLoading(false);
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.error,
+                      title: 'Oops...',
+                      text: "Meeting password is incorrect",
+                    );
+                    return;
+                  }
+
+                  if (meeting.meetingState != MeetingStateTypes.active.index) {
+                    Provider.of<ListenedValues>(context, listen: false)
+                        .setLoading(false);
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: 'Oops...',
+                        text: (meeting.meetingState ==
+                                MeetingStateTypes.ended.index)
+                            ? "Meeting has been ended"
+                            : "Meeting doesn't start yet");
+                    return;
+                  }
+
+                  Map<String, dynamic> map = {
+                    "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}":
+                        enteredMeetingId
+                  };
+
+                  _firebaseMethods.setDataInFirebase(
+                      childPath: "/",
+                      map: map,
+                      onSucc: () {
+                        this.meetingId = meeting.meetingId;
+                        this.adminId = meeting.adminId;
+                        this.meetingType =
+                            Meeting.getMeetingType(meeting.meetingType);
+                        Provider.of<ListenedValues>(context, listen: false)
+                            .setLoading(false);
+                        kIsWeb
+                            ? uni.window.navigator //for web only
+                                .getUserMedia(audio: true, video: true)
+                                .then((value) {
+                                Navigator.pushNamed(
+                                    context, MeetingView.screenRouteName);
+                              })
+                            : Navigator.pushNamed(
+                                context,
+                                MeetingView
+                                    .screenRouteName); //for Android and iOS
+                      },
+                      onFailed: (e) {
+                        Provider.of<ListenedValues>(context, listen: false)
+                            .setLoading(false);
+                        QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.error,
+                          title: 'Oops...',
+                          text: e,
+                        );
+                      });
                 },
-                onFailed: (e) {
+                onFailed: (onFailed) {
                   Provider.of<ListenedValues>(context, listen: false)
                       .setLoading(false);
                   QuickAlert.show(
                     context: context,
                     type: QuickAlertType.error,
                     title: 'Oops...',
-                    text: e,
+                    text: onFailed.toString(),
+                    // text: "Can't reach the meeting.3",
                   );
                 });
           } else {
@@ -239,14 +297,12 @@ class MeetingVM {
                       value: "",
                       onSucc: () {
                         Navigator.pop(context);
-                        createMeeting(
+                        joinRoom(
                             context: context,
-                            meetingTitle: meetingTitle,
-                            password: password,
-                            isPrivate: isPrivate,
-                            started: started,
-                            meetingType: meetingType,
-                            meetingState: meetingState);
+                            userName: userName,
+                            userId: userId,
+                            enteredMeetingId: enteredMeetingId,
+                            password: password);
                       },
                       onFailed: (e) {
                         Navigator.pop(context);

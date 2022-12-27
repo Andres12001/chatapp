@@ -83,12 +83,11 @@ class BottomBarView extends StatelessWidget {
                 ),
               ),
               FloatingCenterButtonChild(
-                child: const Icon(
-                  Icons.close,
-                  color: AppColors.white,
-                ),
-                onTap: () => log('Item3'),
-              ),
+                  child: const Icon(
+                    Icons.close,
+                    color: AppColors.white,
+                  ),
+                  onTap: () => {}),
             ],
           ),
         ),

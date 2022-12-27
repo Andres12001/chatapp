@@ -17,6 +17,7 @@ class JoinSheetContent extends StatelessWidget {
   final JoinSheetVM joinSheetVM;
   @override
   Widget build(BuildContext context) {
+    joinSheetVM.checkName();
     return Consumer<ListenedValues>(builder: (context, updatedData, child) {
       return Container(
         //  margin: EdgeInsets.only(top: size.height * 0.09),
@@ -71,10 +72,11 @@ class JoinSheetContent extends StatelessWidget {
                       text: "Join",
                       bgColor: kPrimaryColor,
                       txtColor: Colors.white,
-                      onPress: () => joinSheetVM.loginPre(
+                      onPress: () => joinSheetVM.joinPre(
                           context: context,
-                          email: joinSheetVM.codeController.text,
-                          password: joinSheetVM.passwordController.text),
+                          code: joinSheetVM.codeController.text,
+                          password: joinSheetVM.passwordController.text,
+                          name: joinSheetVM.nameController.text),
                       icon: Icons.join_full,
                       width: 200,
                     )

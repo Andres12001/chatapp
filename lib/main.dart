@@ -66,7 +66,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               primaryColor: kPrimaryColor,
             ),
             debugShowCheckedModeBanner: false,
-            initialRoute: _auth.currentUser == null
+            initialRoute: (_auth.currentUser == null ||
+                    (_auth.currentUser?.isAnonymous ?? true))
                 ? WelcomeView.screenRouteName
                 : HomeView.screenRouteName,
             routes: {
