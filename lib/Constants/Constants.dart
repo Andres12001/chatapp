@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 //main colors
 const kBackgroundColor = Colors.white;
+const kSecBackgroundColor = Color.fromARGB(255, 133, 3, 3);
 const kLabelColor = Colors.black;
 const kPrimaryColor = Colors.blueAccent;
 const kPrimaryDarkerColor = Colors.blueAccent;

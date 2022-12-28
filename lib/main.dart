@@ -10,6 +10,7 @@ import 'package:first_app/ViewModel/MainVM.dart';
 import 'package:first_app/ViewModel/Meeting/MeetingVM.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:provider/provider.dart';
 import 'Helpers/NavigationService.dart';
 import 'View/Auth/Screens/LoginView.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   // List<String> events = [];
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final MainVM _mainVM = MainVM();
+  final MainVM _mainVM = MainVM.shared;
   final MeetingVM _meetingVM = MeetingVM.shared;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -49,6 +50,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    //GetTimeAgo.setCustomLocaleMessages('en', CustomMessages()); //here for lang and custom
+    GetTimeAgo.setDefaultLocale('en'); //here for lang
   }
 
   @override

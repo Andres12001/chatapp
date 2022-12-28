@@ -1,9 +1,11 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Constants/FirebaseConst.dart';
 import 'package:first_app/Constants/MainConstants.dart';
 import 'package:first_app/Dics/MeetingDic.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/Models/Meeting.dart';
+import 'package:first_app/ViewModel/MainVM.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -64,7 +66,9 @@ class MeetingVM {
                       meetingType,
                       meetingState),
               "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}":
-                  generatedMeetingId
+                  generatedMeetingId,
+              "${FirebaseConst.HISTORY}/$myId/$generatedMeetingId/${FirebaseConst.TIME_CHILD}":
+                  ServerValue.timestamp
             };
 
             _firebaseMethods.setDataInFirebase(
@@ -75,6 +79,7 @@ class MeetingVM {
                   this.adminId = myId!;
                   this.meetingTitle = meetingTitle ?? "";
                   this.meetingType = Meeting.getMeetingType(meetingType);
+                  MainVM.shared.getRecentMeeting(context, generatedMeetingId);
                   //  Navigator.pop(context);
 
                   Provider.of<ListenedValues>(context, listen: false)
@@ -236,7 +241,9 @@ class MeetingVM {
 
                   Map<String, dynamic> map = {
                     "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}":
-                        enteredMeetingId
+                        enteredMeetingId,
+                    "${FirebaseConst.HISTORY}/$myId/$enteredMeetingId/${FirebaseConst.TIME_CHILD}":
+                        ServerValue.timestamp
                   };
 
                   _firebaseMethods.setDataInFirebase(
@@ -248,6 +255,8 @@ class MeetingVM {
                         this.meetingTitle = meeting.meetingTitle;
                         this.meetingType =
                             Meeting.getMeetingType(meeting.meetingType);
+                        MainVM.shared
+                            .getRecentMeeting(context, meeting.meetingId);
                         Provider.of<ListenedValues>(context, listen: false)
                             .setLoading(false);
                         // Navigator.pop(context);
@@ -368,7 +377,6 @@ class MeetingVM {
     if (myId == null) {
       return;
     }
-    FirebaseMethods.listnersMap[FirebaseConst.LISTNER_MEETING_END]?.cancel();
     Map<String, dynamic> map = {
       "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}": ""
     };
@@ -376,6 +384,8 @@ class MeetingVM {
     if (endRoom) {
       map["${FirebaseConst.MEETINGS}/$meetingId/${FirebaseConst.MEETING_STATE}"] =
           MeetingStateTypes.ended.index;
+      Provider.of<ListenedValues>(context, listen: false)
+          .updateRecentMeetingState(MeetingStateTypes.ended.index);
     }
 
     _firebaseMethods.setDataInFirebase(
@@ -385,6 +395,9 @@ class MeetingVM {
           this.meetingId = "";
           this.adminId = "";
           this.meetingTitle = "";
+          FirebaseMethods.listnersMap[FirebaseConst.LISTNER_MEETING_END]
+              ?.cancel();
+
           onComp();
         },
         onFailed: (e) {

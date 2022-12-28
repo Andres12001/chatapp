@@ -7,7 +7,7 @@ import 'LetterAva.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:imager/imager.dart';
 
-class AvatarCustom extends StatefulWidget {
+class AvatarCustom extends StatelessWidget {
   const AvatarCustom(
       {super.key,
       required this.name,
@@ -23,41 +23,31 @@ class AvatarCustom extends StatefulWidget {
   final double radius;
 
   @override
-  State<AvatarCustom> createState() => _AvatarCustomState();
-}
-
-class _AvatarCustomState extends State<AvatarCustom> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Container(child: InkWell(onTap: widget.onPress, child: getAvatar()));
+    return Container(child: InkWell(onTap: onPress, child: getAvatar()));
   }
 
   Widget getAvatar() {
-    if (widget.url != null || widget.url == '') {
+    if (url != null && url != '') {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(widget.radius / 2),
-        child: (widget.isLocal && !kIsWeb)
+        borderRadius: BorderRadius.circular(radius / 2),
+        child: (isLocal && !kIsWeb)
             ? Container(
-                width: widget.radius,
-                height: widget.radius,
+                width: radius,
+                height: radius,
                 decoration: const BoxDecoration(
                     color: defaultPlaceholderColor, shape: BoxShape.circle),
                 child: Image.file(
-                  File(widget.url ?? ""),
-                  width: widget.radius,
-                  height: widget.radius,
+                  File(url ?? ""),
+                  width: radius,
+                  height: radius,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                         color: defaultPlaceholderColor,
                         child: Icon(
                           Icons.error,
-                          size: widget.radius,
+                          size: radius,
                           color: Colors.red,
                         ));
                   },
@@ -65,9 +55,9 @@ class _AvatarCustomState extends State<AvatarCustom> {
               )
             : CachedNetworkImage(
                 color: defaultPlaceholderColor,
-                imageUrl: widget.url ?? "",
-                width: widget.radius,
-                height: widget.radius,
+                imageUrl: url ?? "",
+                width: radius,
+                height: radius,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     color: defaultPlaceholderColor,
@@ -81,20 +71,21 @@ class _AvatarCustomState extends State<AvatarCustom> {
                     color: defaultPlaceholderColor,
                     child: const CircularProgressIndicator()),
                 errorWidget: (context, url, error) {
+                  print(error);
                   return Container(
                       color: defaultPlaceholderColor,
                       child: Icon(
                         Icons.error,
-                        size: widget.radius,
-                        color: Colors.red,
+                        size: radius,
+                        color: Colors.green,
                       ));
                 },
               ),
       );
     } else {
       return LetterAva(
-        radius: widget.radius,
-        name: widget.name,
+        radius: radius,
+        name: name,
       );
     }
   }

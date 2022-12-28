@@ -1,5 +1,6 @@
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:first_app/Constants/Constants.dart';
+import 'package:first_app/View/Home/Screens/HistoryView.dart';
 import 'package:first_app/View/Home/Widgets/HistoryContent.dart';
 import 'package:first_app/ViewModel/Home/HomeVM.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,10 @@ import 'package:provider/provider.dart';
 import '../../../Constants/TabbarConst.dart';
 import '../../../Helpers/FirebaseAuthMethods.dart';
 import '../../../Helpers/ListenedValues.dart';
+import '../../../Helpers/NavigationService.dart';
+import '../../../ViewModel/Home/HistoryVM.dart';
 import '../../Auth/Widgets/AvatarCustom.dart';
+import '../../Auth/Widgets/ButtonOriginal.dart';
 import '../Tabbar/BottomBarView.dart';
 import '../Widgets/HomeContent.dart';
 
@@ -17,7 +21,8 @@ class HomeView extends StatefulWidget {
   static const String screenRouteName = "/Home";
   ScrollController scrollController = ScrollController();
   final HomeVM _homeVM = HomeVM();
-
+  final HistoryVM _historyVM =
+      HistoryVM(NavigationService.navigatorKey.currentContext!);
   List<Widget> tabs = [];
 
   @override
@@ -44,10 +49,19 @@ class _HomeViewState extends State<HomeView> {
       HomeContent(
         homeVM: widget._homeVM,
         scrollController: widget.scrollController,
+        historyVM: widget._historyVM,
       ),
-      HistoryContent(),
+      HistoryView(
+        historyVM: widget._historyVM,
+      ),
       Text("3"),
-      Text("4"),
+      ButtonOriginal(
+          text: "signout",
+          bgColor: kPrimaryColor,
+          txtColor: Colors.white,
+          onPress: () => widget._homeVM.signout(context),
+          icon: Icons.person,
+          width: 200),
     ];
   }
 

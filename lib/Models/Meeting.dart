@@ -3,7 +3,8 @@ import '../PreBuilt/src/prebuilt_call_config.dart';
 class Meeting {
   final String meetingTitle, password, adminId, meetingId;
   final bool isPrivate, started;
-  final int meetingType, meetingState, startTime;
+  final int meetingType, startTime;
+  int meetingState;
 
   Meeting(
       {required this.meetingTitle,

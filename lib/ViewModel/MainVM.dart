@@ -1,12 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
+import 'package:provider/provider.dart';
 
+import '../Constants/FirebaseConst.dart';
 import '../Helpers/FirebaseMethods.dart';
+import '../Helpers/ListenedValues.dart';
 import '../Helpers/NavigationService.dart';
+import '../Models/Meeting.dart';
+import '../Models/MeetingHistory.dart';
 import '../View/Auth/Screens/WelcomeView.dart';
+import 'Home/HistoryVM.dart';
+import 'package:first_app/Models/User.dart' as dbUser;
 
 class MainVM {
+  static final shared = MainVM();
+
+  final FirebaseMethods _firebaseMethods = FirebaseMethods();
+
   void authStream(BuildContext context) {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       myId = user?.uid;
@@ -58,5 +69,56 @@ class MainVM {
         break;
       default:
     }
+  }
+
+  void getRecentMeeting(BuildContext context, String meetingKey) {
+    _firebaseMethods.getSingleDataFromFirebase(
+        childPath: "/${FirebaseConst.MEETINGS}/$meetingKey",
+        onSucc: ((snapshot) {
+          late Map<String, dynamic> meetingMap;
+
+          meetingMap = Map<String, dynamic>.from(snapshot.value as Map);
+          if (meetingMap is! Map<String, dynamic>) {
+            Provider.of<ListenedValues>(context, listen: false)
+                .setLoading(false);
+            return;
+          }
+
+          var meeting = Meeting.transformMeeting(meetingMap);
+          if (meeting is! Meeting) {
+            Provider.of<ListenedValues>(context, listen: false)
+                .setLoading(false);
+            return;
+          }
+
+          _getAdmin(context, meeting);
+        }),
+        onFailed: (error) {});
+  }
+
+  void _getAdmin(BuildContext context, Meeting meeting) {
+    _firebaseMethods.getSingleDataFromFirebase(
+        childPath: "/${FirebaseConst.USERS}/${meeting.adminId}",
+        onSucc: ((snapshot) {
+          late Map<String, dynamic> userMap;
+
+          userMap = Map<String, dynamic>.from(snapshot.value as Map);
+          if (userMap is! Map<String, dynamic>) {
+            Provider.of<ListenedValues>(context, listen: false)
+                .setLoading(false);
+            return;
+          }
+
+          var user = dbUser.User.transformUser(userMap);
+          if (user is! dbUser.User) {
+            Provider.of<ListenedValues>(context, listen: false)
+                .setLoading(false);
+            return;
+          }
+
+          Provider.of<ListenedValues>(context, listen: false)
+              .setRecentMeeting(MeetingHistory(meeting: meeting, user: user));
+        }),
+        onFailed: (error) {});
   }
 }

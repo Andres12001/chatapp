@@ -38,8 +38,6 @@ class MeetingView extends StatelessWidget {
                 });
           },
         onDispose: (endRoom) {
-          FirebaseMethods.listnersMap[FirebaseConst.LISTNER_MEETING_END]
-              ?.cancel();
           MeetingVM.shared
               .leaveMeeting(endRoom: endRoom, context: context, onComp: () {});
         },

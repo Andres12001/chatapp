@@ -1,7 +1,17 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_app/Helpers/FirebaseMethods.dart';
+import 'package:first_app/View/Home/Cells/HistoryCell.dart';
 import 'package:first_app/View/Home/Widgets/HomeArc.dart';
+import 'package:first_app/ViewModel/Home/HistoryVM.dart';
 import 'package:first_app/ViewModel/Home/HomeVM.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import '../../../Constants/Constants.dart';
+import '../../../Helpers/ListenedValues.dart';
 import '../../../Models/Meeting.dart';
 import '../../../ViewModel/Meeting/MeetingVM.dart';
 import '../../Auth/Widgets/ButtonOriginal.dart';
@@ -9,12 +19,15 @@ import 'HomeRow.dart';
 
 class HomeContent extends StatelessWidget {
   HomeContent(
-      {super.key, required this.homeVM, required this.scrollController});
+      {super.key,
+      required this.homeVM,
+      required this.scrollController,
+      required this.historyVM});
 
   final HomeVM homeVM;
   final ScrollController scrollController;
   final MeetingVM _meetingVM = MeetingVM.shared;
-
+  final HistoryVM historyVM;
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -33,13 +46,71 @@ class HomeContent extends StatelessWidget {
                       contentWidget: HomeRow(
                         scrollController: scrollController,
                       )),
-                  ButtonOriginal(
-                      text: "signout",
-                      bgColor: kPrimaryColor,
-                      txtColor: Colors.white,
-                      onPress: () => homeVM.signout(context),
-                      icon: Icons.person,
-                      width: 200),
+
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Your recent Meeting",
+                        textAlign: TextAlign.start,
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontSize: 30,
+                            color: kLabelColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Provider.of<ListenedValues>(context).recentMeeting == null
+                          ? Text("No recent meeting to show",
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.grey))
+                          : InkWell(
+                              onTap: () {
+                                if (Provider.of<ListenedValues>(context)
+                                        .recentMeeting!
+                                        .meeting
+                                        .meetingState ==
+                                    MeetingStateTypes.active.index) {
+                                  MeetingVM.shared.joinRoom(
+                                      context: context,
+                                      userName: FirebaseAuth.instance
+                                              .currentUser?.displayName ??
+                                          "",
+                                      userId: myId!,
+                                      enteredMeetingId:
+                                          Provider.of<ListenedValues>(context)
+                                              .recentMeeting!
+                                              .meeting
+                                              .meetingId,
+                                      password:
+                                          Provider.of<ListenedValues>(context)
+                                              .recentMeeting!
+                                              .meeting
+                                              .password);
+                                } else {
+                                  QuickAlert.show(
+                                    context: context,
+                                    type: QuickAlertType.error,
+                                    title: 'Oops...',
+                                    text:
+                                        "This meeting can't be joined again because it has been ended",
+                                  );
+                                }
+                              },
+                              child: HistoryCell(
+                                  historyItem:
+                                      Provider.of<ListenedValues>(context)
+                                          .recentMeeting!,
+                                  historyVM: historyVM),
+                            ),
+                    ],
+                  ),
                 ]),
               ),
             ),
