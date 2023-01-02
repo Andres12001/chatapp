@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 //main colors
 const kBackgroundColor = Colors.white;
-const kSecBackgroundColor = Color.fromARGB(255, 133, 3, 3);
+const kSecBackgroundColor = Color.fromARGB(255, 242, 242, 242);
+
+///Color.fromARGB(255, 239, 239, 239);
 const kLabelColor = Colors.black;
 const kPrimaryColor = Colors.blueAccent;
 const kPrimaryDarkerColor = Colors.blueAccent;
@@ -15,7 +17,7 @@ const kTabBGColor = Color.fromARGB(255, 255, 253, 253);
 //avatars colors
 const defaultPlaceholderColor = Color.fromARGB(255, 231, 231, 231);
 var avaColors = [
-  Colors.blueAccent,
+  Colors.pink,
   Colors.blueGrey,
   Colors.black,
   Colors.yellow,
@@ -23,6 +25,8 @@ var avaColors = [
   Colors.green,
   Colors.blueGrey
 ];
+
+Map<String, Color> avaConstMap = {};
 
 //other colors
 

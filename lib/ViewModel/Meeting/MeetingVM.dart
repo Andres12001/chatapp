@@ -5,12 +5,15 @@ import 'package:first_app/Constants/MainConstants.dart';
 import 'package:first_app/Dics/MeetingDic.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/Models/Meeting.dart';
+import 'package:first_app/View/Home/Screens/HomeView.dart';
 import 'package:first_app/ViewModel/MainVM.dart';
 import 'package:flutter/material.dart';
+import 'package:locally/locally.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import '../../Helpers/ListenedValues.dart';
+import '../../Helpers/NavigationService.dart';
 import '../../PreBuilt/zego_uikit_prebuilt_call.dart';
 import 'package:universal_html/html.dart' as uni;
 import 'package:first_app/View/Meeting/MeetingView.dart';
@@ -64,13 +67,18 @@ class MeetingVM {
                       isPrivate,
                       started,
                       meetingType,
-                      meetingState),
-              "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}":
-                  generatedMeetingId,
+                      meetingState,
+                      Provider.of<ListenedValues>(context, listen: false)
+                          .scheduleDateTime
+                          ?.millisecondsSinceEpoch),
               "${FirebaseConst.HISTORY}/$myId/$generatedMeetingId/${FirebaseConst.TIME_CHILD}":
                   ServerValue.timestamp
             };
 
+            if (started) {
+              map["${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}"] =
+                  generatedMeetingId;
+            }
             _firebaseMethods.setDataInFirebase(
                 childPath: "/",
                 map: map,
@@ -82,17 +90,50 @@ class MeetingVM {
                   MainVM.shared.getRecentMeeting(context, generatedMeetingId);
                   //  Navigator.pop(context);
 
+                  if (!started) {
+                    if (!kIsWeb) {
+                      Locally locally = Locally(
+                        context: context,
+                        payload: generatedMeetingId,
+                        pageRoute: MaterialPageRoute(builder: (context) {
+                          Provider.of<ListenedValues>(context, listen: false)
+                              .setHomeIndex(2);
+                          return HomeView();
+                        }),
+                        appIcon: 'mipmap/ic_launcher',
+                      );
+                      locally.schedule(
+                          title: meetingTitle,
+                          message: "Your scheduled meeting started",
+                          duration: Provider.of<ListenedValues>(context,
+                                  listen: false)
+                              .scheduleDateTime!
+                              .difference(DateTime.now()));
+                    }
+                    Provider.of<ListenedValues>(context, listen: false)
+                        .updateScheduleDateTime(null);
+                  }
+
                   Provider.of<ListenedValues>(context, listen: false)
                       .setLoading(false);
-                  kIsWeb
-                      ? uni.window.navigator //for web only
+
+                  if (kIsWeb) {
+                    if (started) {
+                      uni.window.navigator //for web only
                           .getUserMedia(audio: true, video: true)
                           .then((value) {
-                          Navigator.pushNamed(
-                              context, MeetingView.screenRouteName);
-                        })
-                      : Navigator.pushNamed(context,
-                          MeetingView.screenRouteName); //for Android and iOS
+                        Navigator.pushNamed(
+                            context, MeetingView.screenRouteName);
+                      });
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  } else {
+                    Navigator.pop(context);
+                    if (started) {
+                      Navigator.pushNamed(context, MeetingView.screenRouteName);
+                    } //for Android and iOS
+                  }
                 },
                 onFailed: (e) {
                   Provider.of<ListenedValues>(context, listen: false)
@@ -152,22 +193,23 @@ class MeetingVM {
             context: context,
             type: QuickAlertType.error,
             title: 'Oops...',
-            text: e,
+            text: "${e}222",
           );
         });
   }
 
 //i will start here
-  void joinRoom({
-    required BuildContext context,
-    required String userName,
-    required String userId,
-    required String enteredMeetingId,
-    required String password,
-  }) {
+  void joinRoom(
+      {required BuildContext context,
+      required String userName,
+      required String userId,
+      required String enteredMeetingId,
+      required String password,
+      bool scheduleStart = false}) {
     if (myId == null) {
       return;
     }
+
     Provider.of<ListenedValues>(context, listen: false).setLoading(true);
 
     _firebaseMethods.getSingleDataFromFirebase(
@@ -225,7 +267,8 @@ class MeetingVM {
                     return;
                   }
 
-                  if (meeting.meetingState != MeetingStateTypes.active.index) {
+                  if (meeting.meetingState != MeetingStateTypes.active.index &&
+                      !scheduleStart) {
                     Provider.of<ListenedValues>(context, listen: false)
                         .setLoading(false);
                     QuickAlert.show(
@@ -246,6 +289,12 @@ class MeetingVM {
                         ServerValue.timestamp
                   };
 
+                  if (scheduleStart) {
+                    map["${FirebaseConst.MEETINGS}/$enteredMeetingId/${FirebaseConst.MEETING_STARTED}"] =
+                        true;
+                    map["${FirebaseConst.MEETINGS}/$enteredMeetingId/${FirebaseConst.MEETING_STATE}"] =
+                        MeetingStateTypes.active.index;
+                  }
                   _firebaseMethods.setDataInFirebase(
                       childPath: "/",
                       map: map,
@@ -260,17 +309,20 @@ class MeetingVM {
                         Provider.of<ListenedValues>(context, listen: false)
                             .setLoading(false);
                         // Navigator.pop(context);
-                        kIsWeb
-                            ? uni.window.navigator //for web only
-                                .getUserMedia(audio: true, video: true)
-                                .then((value) {
-                                Navigator.pushNamed(
-                                    context, MeetingView.screenRouteName);
-                              })
-                            : Navigator.pushNamed(
-                                context,
-                                MeetingView
-                                    .screenRouteName); //for Android and iOS
+                        if (kIsWeb) {
+                          uni.window.navigator //for web only
+                              .getUserMedia(audio: true, video: true)
+                              .then((value) {
+                            Navigator.pushNamed(
+                                context, MeetingView.screenRouteName);
+                          });
+                        } else {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(
+                              context,
+                              MeetingView
+                                  .screenRouteName); //for Android and iOS
+                        }
                       },
                       onFailed: (e) {
                         Provider.of<ListenedValues>(context, listen: false)
@@ -380,11 +432,12 @@ class MeetingVM {
     Map<String, dynamic> map = {
       "${FirebaseConst.USERS}/$myId/${FirebaseConst.IN_MEETING}": ""
     };
-
     if (endRoom) {
       map["${FirebaseConst.MEETINGS}/$meetingId/${FirebaseConst.MEETING_STATE}"] =
           MeetingStateTypes.ended.index;
-      Provider.of<ListenedValues>(context, listen: false)
+      Provider.of<ListenedValues>(
+              NavigationService.navigatorKey.currentContext!,
+              listen: false)
           .updateRecentMeetingState(MeetingStateTypes.ended.index);
     }
 

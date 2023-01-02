@@ -19,24 +19,27 @@ class ButtonsStretch extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: onPress,
-        child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-          elevation: 10,
-          color: bgColor,
-          child: ListTile(
-            title: Text(
-              text,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+        child: SizedBox(
+          width: double.infinity > 600 ? 600 : double.infinity,
+          child: Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            elevation: 10,
+            color: bgColor,
+            child: ListTile(
+              title: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: txtColor,
+                ),
+              ),
+              leading: Icon(
+                icon,
+                size: 25,
                 color: txtColor,
               ),
-            ),
-            leading: Icon(
-              icon,
-              size: 25,
-              color: txtColor,
             ),
           ),
         ));

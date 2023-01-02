@@ -4,6 +4,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../Constants/Constants.dart';
 import '../../Meeting/Sheets/JoinSheetView.dart';
+import '../../Meeting/Sheets/ScheduleSheetView.dart';
 import 'HomeMainButton.dart';
 
 class HomeRow extends StatelessWidget {
@@ -44,10 +45,16 @@ class HomeRow extends StatelessWidget {
                 })),
             HomeMainButton(
                 bgColor: Colors.white,
-                icon: Icons.calendar_month,
+                icon: Icons.alarm_add,
                 text: "Schedule meeting",
                 txtColor: kPrimaryColor,
-                onPress: (() {}))
+                onPress: (() {
+                  showCupertinoModalBottomSheet(
+                    context: context,
+                    expand: true,
+                    builder: (context) => ScheduleSheetView(),
+                  );
+                }))
           ],
         ),
       ),

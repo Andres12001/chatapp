@@ -11,9 +11,10 @@ class LetterAva extends StatelessWidget {
 
   final double radius;
   final String name;
-  Color bgColor = (avaColors..shuffle()).first;
+  Color bgColor = Colors.white;
   @override
   Widget build(BuildContext context) {
+    bgColor = getColor(name);
     return Container(
         width: radius,
         height: radius,
@@ -37,5 +38,14 @@ class LetterAva extends StatelessWidget {
     }
 
     return txtF.isEmpty ? "^  ^" : txtF;
+  }
+
+  Color getColor(String name) {
+    if (avaConstMap[name] is Color) {
+      return avaConstMap[name] as Color;
+    } else {
+      avaConstMap[name] = (avaColors..shuffle()).first;
+      return avaConstMap[name] as Color;
+    }
   }
 }

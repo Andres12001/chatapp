@@ -1,7 +1,8 @@
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/View/Home/Screens/HistoryView.dart';
-import 'package:first_app/View/Home/Widgets/HistoryContent.dart';
+import 'package:first_app/View/Home/Screens/ScheduleView.dart';
+import 'package:first_app/View/Home/Screens/SettingsView.dart';
 import 'package:first_app/ViewModel/Home/HomeVM.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,8 +12,8 @@ import '../../../Helpers/FirebaseAuthMethods.dart';
 import '../../../Helpers/ListenedValues.dart';
 import '../../../Helpers/NavigationService.dart';
 import '../../../ViewModel/Home/HistoryVM.dart';
+import '../../../ViewModel/Home/ScheduleVM.dart';
 import '../../Auth/Widgets/AvatarCustom.dart';
-import '../../Auth/Widgets/ButtonOriginal.dart';
 import '../Tabbar/BottomBarView.dart';
 import '../Widgets/HomeContent.dart';
 
@@ -22,7 +23,9 @@ class HomeView extends StatefulWidget {
   ScrollController scrollController = ScrollController();
   final HomeVM _homeVM = HomeVM();
   final HistoryVM _historyVM =
-      HistoryVM(NavigationService.navigatorKey.currentContext!);
+      HistoryVM(NavigationService.navigatorKey.currentContext!, false);
+  final HistoryVM _historyScheduleVM =
+      HistoryVM(NavigationService.navigatorKey.currentContext!, true);
   List<Widget> tabs = [];
 
   @override
@@ -54,15 +57,12 @@ class _HomeViewState extends State<HomeView> {
       HistoryView(
         historyVM: widget._historyVM,
       ),
-      Text("3"),
-      ButtonOriginal(
-          text: "signout",
-          bgColor: kPrimaryColor,
-          txtColor: Colors.white,
-          onPress: () => widget._homeVM.signout(context),
-          icon: Icons.person,
-          width: 200),
+      ScheduleView(historyVM: widget._historyScheduleVM),
+      SettingsView()
     ];
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget._homeVM.scrollAnimated(widget.scrollController, 38);
+    });
   }
 
   @override
@@ -86,7 +86,7 @@ class _HomeViewState extends State<HomeView> {
                 isLocal: false,
                 url: FirebaseAuthMethods.getMyPhoto(),
                 name: FirebaseAuthMethods.getMyname(),
-                onPress: () => {},
+                onPress: () => {widget._homeVM.onTabTapped(3, context)},
                 radius: 40,
               ),
             ),

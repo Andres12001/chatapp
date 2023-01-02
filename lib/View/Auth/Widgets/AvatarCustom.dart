@@ -71,13 +71,12 @@ class AvatarCustom extends StatelessWidget {
                     color: defaultPlaceholderColor,
                     child: const CircularProgressIndicator()),
                 errorWidget: (context, url, error) {
-                  print(error);
                   return Container(
                       color: defaultPlaceholderColor,
                       child: Icon(
                         Icons.error,
                         size: radius,
-                        color: Colors.green,
+                        color: Colors.red,
                       ));
                 },
               ),

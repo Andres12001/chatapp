@@ -1,1 +1,2 @@
 -keep class **.zego.** { *; }
+-keep class com.dexterous.** { *; }

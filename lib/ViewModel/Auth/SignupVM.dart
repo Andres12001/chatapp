@@ -18,6 +18,7 @@ import '../../Helpers/FirebaseAuthMethods.dart';
 import '../../Helpers/FirebaseMethods.dart';
 import '../../Helpers/ListenedValues.dart';
 import '../../View/Home/Screens/HomeView.dart';
+import '../MainVM.dart';
 
 class SignupVM {
   TextEditingController emailController = TextEditingController();
@@ -66,7 +67,7 @@ class SignupVM {
         email: email,
         password: password,
         onSucc: (user) {
-          uploadAva(context, email, user!.uid, false, nameF, nameL);
+          uploadAva(context, email, user!.uid, false, nameF, nameL, "email");
         },
         onFailed: (e) {
           Provider.of<ListenedValues>(context, listen: false).setLoading(false);
@@ -80,31 +81,34 @@ class SignupVM {
   }
 
   void uploadAva(BuildContext context, String loginInfo, String id, bool ios,
-      String nameF, String nameL) {
+      String nameF, String nameL, String loginType) {
     if (imageFinal != null) {
       _firebaseMethods.uploadPhotoStorage(
           childPath: FirebaseConst.AVA,
           file: imageFinal,
           onSucc: (url) {
-            regUserDb(context, loginInfo, id, ios, nameF, nameL, url);
+            regUserDb(
+                context, loginInfo, id, ios, nameF, nameL, url, loginType);
           },
           onFailed: (e) {
             Provider.of<ListenedValues>(context, listen: false)
                 .setLoading(false);
           });
     } else {
-      regUserDb(context, loginInfo, id, ios, nameF, nameL, null);
+      regUserDb(context, loginInfo, id, ios, nameF, nameL, null, loginType);
     }
   }
 
   void regUserDb(BuildContext context, String loginInfo, String id, bool ios,
-      String nameF, String nameL, String? ava) async {
+      String nameF, String nameL, String? ava, String loginType) async {
     await FirebaseAuth.instance.currentUser?.updateDisplayName("$nameF $nameL");
     await FirebaseAuth.instance.currentUser?.updatePhotoURL(ava ?? "");
     _firebaseMethods.setDataInFirebase(
         childPath: "${FirebaseConst.USERS}/$id",
-        map: UserDic.createUserMap(loginInfo, id, ios, nameF, nameL, ava),
+        map: UserDic.createUserMap(
+            loginInfo, id, ios, nameF, nameL, ava, loginType),
         onSucc: () {
+          MainVM.shared.performBlockDeleteUser(context);
           Provider.of<ListenedValues>(context, listen: false).setLoading(false);
 
           Navigator.pushNamedAndRemoveUntil(

@@ -10,18 +10,24 @@ import '../../Models/MeetingHistory.dart';
 
 class HistoryVM {
   final FirebaseMethods _firebaseMethods = FirebaseMethods();
-  HistoryVM(BuildContext context) {
-    getHistory(context, false);
+  HistoryVM(BuildContext context, bool isSchedule) {
+    getHistory(context, false, isSchedule);
   }
 
-  void getHistory(BuildContext context, bool isReloaded) {
+  void getHistory(BuildContext context, bool isReloaded, bool isSchedule) {
     if (myId == null) {
       return;
     }
     // if (!isReloaded) {
     //   Provider.of<ListenedValues>(context, listen: false).setLoading(true);
     // }
-    Provider.of<ListenedValues>(context, listen: false).clearHistoryList();
+    if (isSchedule) {
+      Provider.of<ListenedValues>(context, listen: false)
+          .clearScheduleHistoryList();
+    } else {
+      Provider.of<ListenedValues>(context, listen: false).clearHistoryList();
+    }
+
     _firebaseMethods.getSingleDataFromFirebase(
         childPath: "/${FirebaseConst.HISTORY}/$myId",
         onSucc: ((snapshot) {
@@ -37,7 +43,7 @@ class HistoryVM {
           }
 
           for (var key in historyMap.keys) {
-            _getMeeting(context, key);
+            _getMeeting(context, key, isSchedule);
           }
         }),
         onFailed: (error) {
@@ -45,7 +51,7 @@ class HistoryVM {
         });
   }
 
-  void _getMeeting(BuildContext context, String meetingKey) {
+  void _getMeeting(BuildContext context, String meetingKey, bool isSchedule) {
     _firebaseMethods.getSingleDataFromFirebase(
         childPath: "/${FirebaseConst.MEETINGS}/$meetingKey",
         onSucc: ((snapshot) {
@@ -65,12 +71,20 @@ class HistoryVM {
             return;
           }
 
-          _getAdmin(context, meeting);
+//for history
+          if (meeting.started && !isSchedule) {
+            _getAdmin(context, meeting, isSchedule);
+          }
+
+          //for schedule history
+          if (!meeting.started && isSchedule) {
+            _getAdmin(context, meeting, isSchedule);
+          }
         }),
         onFailed: (error) {});
   }
 
-  void _getAdmin(BuildContext context, Meeting meeting) {
+  void _getAdmin(BuildContext context, Meeting meeting, bool isSchedule) {
     _firebaseMethods.getSingleDataFromFirebase(
         childPath: "/${FirebaseConst.USERS}/${meeting.adminId}",
         onSucc: ((snapshot) {
@@ -90,8 +104,19 @@ class HistoryVM {
             return;
           }
 
-          Provider.of<ListenedValues>(context, listen: false)
-              .updateHistoryList(MeetingHistory(meeting: meeting, user: user));
+          //for history
+          if (meeting.started && !isSchedule) {
+            Provider.of<ListenedValues>(context, listen: false)
+                .updateHistoryList(
+                    MeetingHistory(meeting: meeting, user: user));
+          }
+
+          //for schedule history
+          if (!meeting.started && isSchedule) {
+            Provider.of<ListenedValues>(context, listen: false)
+                .updateScheduleHistoryList(
+                    MeetingHistory(meeting: meeting, user: user));
+          }
         }),
         onFailed: (error) {});
   }

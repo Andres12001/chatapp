@@ -1,6 +1,6 @@
 class User {
-  final String loginInfo, id, ava, nameF, nameL, statue, meetingId;
-  final bool isAdmin, ios, isprivate, verify, online;
+  final String loginInfo, id, ava, nameF, nameL, statue, meetingId, loginType;
+  final bool isAdmin, ios, isprivate, verify, online, isBlocked;
 
   User(
       {required this.loginInfo,
@@ -9,12 +9,14 @@ class User {
       required this.online,
       required this.nameF,
       required this.nameL,
+      required this.loginType,
       required this.statue,
       required this.meetingId,
       required this.isAdmin,
       required this.ios,
       required this.isprivate,
-      required this.verify});
+      required this.verify,
+      required this.isBlocked});
 
   static User? transformUser(Map<String, dynamic> map) {
     //required
@@ -22,9 +24,10 @@ class User {
     final id = map["id"];
     final nameF = map["nameF"];
     final nameL = map["nameL"];
-
+    final loginType = map["loginType"];
     final ava = map["ava"] ?? "";
     final statue = map["statue"] ?? "";
+    final isBlocked = map["isBlocked"];
     final meetingId = map["meetingId"] ?? "";
     final isAdmin = map["isAdmin"] ?? false;
     final ios = map["ios"] ?? false;
@@ -35,7 +38,9 @@ class User {
     if ((loginInfo is! String) ||
         (id is! String) ||
         (nameF is! String) ||
-        (nameL is! String)) {
+        (nameL is! String) ||
+        (loginType is! String) ||
+        (isBlocked is! bool)) {
       return null;
     }
 
@@ -51,6 +56,8 @@ class User {
         isAdmin: isAdmin,
         ios: ios,
         isprivate: isprivate,
-        verify: verify);
+        verify: verify,
+        isBlocked: isBlocked,
+        loginType: loginType);
   }
 }

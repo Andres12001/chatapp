@@ -10,11 +10,11 @@ import '../../Auth/Widgets/ButtonOriginal.dart';
 
 class HistoryView extends StatelessWidget {
   HistoryView({super.key, required this.historyVM});
+  static const String screenRouteName = "/History";
 
   final HistoryVM historyVM;
   @override
   Widget build(BuildContext context) {
-    //_historyVM.getHistory(context, false);
     return RefreshIndicator(
         onRefresh: _pullRefresh,
         child: ListView.builder(
@@ -30,7 +30,8 @@ class HistoryView extends StatelessWidget {
   }
 
   Future<void> _pullRefresh() async {
-    historyVM.getHistory(NavigationService.navigatorKey.currentContext!, true);
+    historyVM.getHistory(
+        NavigationService.navigatorKey.currentContext!, true, false);
     await Future.delayed(const Duration(milliseconds: 500));
   }
 }

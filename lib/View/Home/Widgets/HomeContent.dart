@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
+import 'package:first_app/Helpers/NavigationService.dart';
 import 'package:first_app/View/Home/Cells/HistoryCell.dart';
 import 'package:first_app/View/Home/Widgets/HomeArc.dart';
 import 'package:first_app/ViewModel/Home/HistoryVM.dart';
@@ -72,7 +73,8 @@ class HomeContent extends StatelessWidget {
                                   TextStyle(fontSize: 15, color: Colors.grey))
                           : InkWell(
                               onTap: () {
-                                if (Provider.of<ListenedValues>(context)
+                                if (Provider.of<ListenedValues>(context,
+                                            listen: false)
                                         .recentMeeting!
                                         .meeting
                                         .meetingState ==
@@ -84,15 +86,17 @@ class HomeContent extends StatelessWidget {
                                           "",
                                       userId: myId!,
                                       enteredMeetingId:
-                                          Provider.of<ListenedValues>(context)
+                                          Provider.of<ListenedValues>(context,
+                                                  listen: false)
                                               .recentMeeting!
                                               .meeting
                                               .meetingId,
-                                      password:
-                                          Provider.of<ListenedValues>(context)
-                                              .recentMeeting!
-                                              .meeting
-                                              .password);
+                                      password: Provider.of<ListenedValues>(
+                                              context,
+                                              listen: false)
+                                          .recentMeeting!
+                                          .meeting
+                                          .password);
                                 } else {
                                   QuickAlert.show(
                                     context: context,
@@ -104,9 +108,10 @@ class HomeContent extends StatelessWidget {
                                 }
                               },
                               child: HistoryCell(
-                                  historyItem:
-                                      Provider.of<ListenedValues>(context)
-                                          .recentMeeting!,
+                                  historyItem: Provider.of<ListenedValues>(
+                                          context,
+                                          listen: false)
+                                      .recentMeeting!,
                                   historyVM: historyVM),
                             ),
                     ],

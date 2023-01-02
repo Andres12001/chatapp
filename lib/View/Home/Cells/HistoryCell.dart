@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:first_app/Helpers/DateFormater.dart';
+import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/Models/Meeting.dart';
 import 'package:first_app/Models/MeetingHistory.dart';
 import 'package:first_app/View/Auth/Widgets/AvatarCustom.dart';
+import 'package:first_app/View/Auth/Widgets/ButtonOriginal.dart';
+import 'package:first_app/ViewModel/Meeting/MeetingVM.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sfsymbols/flutter_sfsymbols.dart';
 
@@ -107,7 +110,29 @@ class HistoryCell extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
+                    ),
+                    historyItem.meeting.started
+                        ? Container()
+                        : ButtonOriginal(
+                            text: "Start meeting",
+                            bgColor: kPrimaryColor,
+                            txtColor: Colors.white,
+                            onPress: () {
+                              MeetingVM.shared.joinRoom(
+                                  context: context,
+                                  userName:
+                                      "${historyItem.user.nameF} ${historyItem.user.nameL}",
+                                  userId: historyItem.user.id,
+                                  enteredMeetingId:
+                                      historyItem.meeting.meetingId,
+                                  password: historyItem.meeting.password,
+                                  scheduleStart: true);
+                            },
+                            icon: Icons.arrow_circle_right,
+                            width: double.infinity),
+                    SizedBox(
+                      height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,

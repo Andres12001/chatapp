@@ -9,7 +9,8 @@ class MeetingDic {
       bool isPrivate,
       bool started,
       int meetingType,
-      int meetingState) {
+      int meetingState,
+      int? startTime) {
     Map<String, dynamic> map = {
       "meetingTitle": meetingTitle,
       "password": password,
@@ -19,7 +20,7 @@ class MeetingDic {
       "started": started,
       "meetingType": meetingType,
       "meetingState": meetingState,
-      "startTime": ServerValue.timestamp,
+      "startTime": startTime ?? ServerValue.timestamp,
     };
 
     return map;

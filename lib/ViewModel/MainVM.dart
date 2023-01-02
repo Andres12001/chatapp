@@ -10,7 +10,6 @@ import '../Helpers/NavigationService.dart';
 import '../Models/Meeting.dart';
 import '../Models/MeetingHistory.dart';
 import '../View/Auth/Screens/WelcomeView.dart';
-import 'Home/HistoryVM.dart';
 import 'package:first_app/Models/User.dart' as dbUser;
 
 class MainVM {
@@ -22,17 +21,48 @@ class MainVM {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       myId = user?.uid;
       if (user == null) {
+        print("user signout");
         performSignout(
             NavigationService.navigatorKey.currentContext ?? context);
       } else {
+        print("user signin");
         FirebaseMethods.onlineControl(true);
       }
     });
   }
 
+  void performBlockDeleteUser(BuildContext context) {
+    if (myId == null) {
+      return;
+    }
+    _firebaseMethods.getListnerOnData(
+        childPath:
+            "${FirebaseConst.USERS}/${myId!}/${FirebaseConst.IS_BLCOKED}",
+        onSucc: (snapshot) {
+          late bool isBlocked;
+
+          if (snapshot.value is! bool) {
+            isBlocked = true;
+          } else {
+            isBlocked = snapshot.value as bool;
+          }
+
+          if (isBlocked) {
+            performSignout(
+                NavigationService.navigatorKey.currentContext ?? context);
+          }
+
+          print("Blockkkked : $isBlocked");
+        },
+        listnerMapkey: FirebaseConst.LISTNER_BlOCK_DELETE,
+        onFailed: (onFailed) {});
+  }
+
   void performSignout(BuildContext context) {
+    FirebaseMethods.listnersMap[FirebaseConst.LISTNER_BlOCK_DELETE]?.cancel();
     Navigator.pushNamedAndRemoveUntil(
         context, WelcomeView.screenRouteName, (route) => false);
+    Provider.of<ListenedValues>(context, listen: false).setHomeIndex(0);
   }
 
   void performStateChange(AppLifecycleState state) {

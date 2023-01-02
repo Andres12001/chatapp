@@ -1,14 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/View/Auth/Screens/SignupView.dart';
 import 'package:first_app/View/Auth/Screens/WelcomeView.dart';
 import 'package:first_app/View/Home/Screens/HomeView.dart';
+import 'package:first_app/ViewModel/MainVM.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
+import '../../Constants/FirebaseConst.dart';
 import '../../Constants/FirebaseMessages.dart';
 import '../../Helpers/FirebaseAuthMethods.dart';
 import '../../Helpers/ListenedValues.dart';
@@ -17,7 +20,7 @@ class LoginVM {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   FirebaseAuthMethods _firebaseAuthMethods = FirebaseAuthMethods();
-
+  FirebaseMethods _firebaseMethods = FirebaseMethods();
   void fieldUpdate(String value, TextEditingController controller) {
     // controller.text = value;
   }
@@ -41,10 +44,46 @@ class LoginVM {
         email: email,
         password: password,
         onSucc: (user) {
-          Provider.of<ListenedValues>(context, listen: false).setLoading(false);
+          _firebaseMethods.getSingleDataFromFirebase(
+              childPath:
+                  "${FirebaseConst.USERS}/${user!.uid}/${FirebaseConst.IS_BLCOKED}",
+              onSucc: (snapshot) {
+                late bool isBlocked;
 
-          Navigator.pushNamedAndRemoveUntil(
-              context, HomeView.screenRouteName, (route) => false);
+                if (snapshot.value is! bool) {
+                  isBlocked = true;
+                } else {
+                  isBlocked = snapshot.value as bool;
+                }
+
+                if (isBlocked) {
+                  Provider.of<ListenedValues>(context, listen: false)
+                      .setLoading(false);
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.error,
+                    title: 'Oops...',
+                    text: "This account has been blocked from our system",
+                  );
+                } else {
+                  MainVM.shared.performBlockDeleteUser(context);
+                  Provider.of<ListenedValues>(context, listen: false)
+                      .setLoading(false);
+
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, HomeView.screenRouteName, (route) => false);
+                }
+              },
+              onFailed: (e) {
+                Provider.of<ListenedValues>(context, listen: false)
+                    .setLoading(false);
+                QuickAlert.show(
+                  context: context,
+                  type: QuickAlertType.error,
+                  title: 'Oops...',
+                  text: FirebaseMessages.getMessageFromErrorCode(e),
+                );
+              });
         },
         onFailed: (e) {
           Provider.of<ListenedValues>(context, listen: false).setLoading(false);

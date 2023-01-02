@@ -2,10 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Helpers/ListenedValues.dart';
+import 'package:first_app/View/Auth/Sheets/PolicySheetView.dart';
 import 'package:first_app/View/Auth/Sheets/TermsSheetView.dart';
+import 'package:first_app/View/Home/Screens/HistoryView.dart';
 import 'package:first_app/View/Home/Screens/HomeView.dart';
+import 'package:first_app/View/Home/Screens/ScheduleView.dart';
+import 'package:first_app/View/Home/Screens/SettingsView.dart';
 import 'package:first_app/View/Meeting/MeetingView.dart';
 import 'package:first_app/View/Meeting/Sheets/CreateSheetView.dart';
+import 'package:first_app/View/Meeting/Sheets/ScheduleSheetView.dart';
 import 'package:first_app/ViewModel/MainVM.dart';
 import 'package:first_app/ViewModel/Meeting/MeetingVM.dart';
 import 'package:flutter/material.dart';
@@ -52,11 +57,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     //GetTimeAgo.setCustomLocaleMessages('en', CustomMessages()); //here for lang and custom
     GetTimeAgo.setDefaultLocale('en'); //here for lang
+    _mainVM.authStream(context);
+    _mainVM.performBlockDeleteUser(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    _mainVM.authStream(context);
     return FGBGNotifier(
         onEvent: (event) {
           //  events.add(event.toString());
@@ -83,6 +89,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               JoinSheetView.screenRouteName: (context) => JoinSheetView(),
               TermsSheetView.screenRouteName: (context) => TermsSheetView(),
               CreateSheetView.screenRouteName: (context) => CreateSheetView(),
+              ScheduleSheetView.screenRouteName: (context) =>
+                  ScheduleSheetView(),
+              // ScheduleView.screenRouteName: (context) => ScheduleView(),
+              // HistoryView.screenRouteName: (context) => HistoryView(historyVM: null,),
+              SettingsView.screenRouteName: (context) => SettingsView(),
+              PolicySheetView.screenRouteName: (context) => PolicySheetView(),
             },
           ),
         ));

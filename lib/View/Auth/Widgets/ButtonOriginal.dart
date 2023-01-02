@@ -24,7 +24,7 @@ class ButtonOriginal extends StatelessWidget {
       child: InkWell(
           onTap: onPress,
           child: SizedBox(
-            width: width,
+            width: width > 500 ? 500 : width,
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0)),
