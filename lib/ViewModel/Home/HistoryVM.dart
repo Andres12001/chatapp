@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Constants/FirebaseConst.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
@@ -7,10 +8,18 @@ import 'package:provider/provider.dart';
 import '../../Helpers/ListenedValues.dart';
 import '../../Models/Meeting.dart';
 import '../../Models/MeetingHistory.dart';
+import '../../View/Auth/Screens/WelcomeView.dart';
 
 class HistoryVM {
   final FirebaseMethods _firebaseMethods = FirebaseMethods();
   HistoryVM(BuildContext context, bool isSchedule) {
+    if (myId == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, WelcomeView.screenRouteName, (route) => false);
+      });
+      return;
+    }
     getHistory(context, false, isSchedule);
   }
 
@@ -125,13 +134,13 @@ class HistoryVM {
     String stateString = "";
     switch (MeetingStateTypes.values[state]) {
       case MeetingStateTypes.active:
-        stateString = "Active";
+        stateString = "active".tr();
         break;
       case MeetingStateTypes.ended:
-        stateString = "Ended";
+        stateString = "ended".tr();
         break;
       case MeetingStateTypes.scheduld:
-        stateString = "Scheduled";
+        stateString = "scheduled".tr();
         break;
     }
     return stateString;

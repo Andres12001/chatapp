@@ -66,27 +66,23 @@ class BottomBarView extends StatelessWidget {
             ),
             centerIconChild: [
               FloatingCenterButtonChild(
-                child: const Icon(
-                  Icons.add_circle,
-                  color: AppColors.white,
-                ),
-                onTap: () => showCupertinoModalBottomSheet(
-                  context: context,
-                  expand: true,
-                  builder: (context) => CreateSheetView(),
-                ),
-              ),
+                  child: const Icon(
+                    Icons.add_circle,
+                    color: AppColors.white,
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context, CreateMeetingView.screenRouteName);
+                  }),
               FloatingCenterButtonChild(
-                child: const Icon(
-                  Icons.join_full,
-                  color: AppColors.white,
-                ),
-                onTap: () => showCupertinoModalBottomSheet(
-                  context: context,
-                  expand: true,
-                  builder: (context) => JoinSheetView(),
-                ),
-              ),
+                  child: const Icon(
+                    Icons.join_full,
+                    color: AppColors.white,
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context, JoinMeetingView.screenRouteName);
+                  }),
               FloatingCenterButtonChild(
                   child: const Icon(
                     Icons.close,

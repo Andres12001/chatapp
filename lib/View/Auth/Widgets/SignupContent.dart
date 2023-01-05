@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/ViewModel/Auth/SignupVM.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
@@ -66,7 +67,7 @@ class _SignupContentState extends State<SignupContent> {
                   children: [
                     Expanded(
                       child: TextFieldWidget(
-                        hint: "First Name",
+                        hint: "f_name".tr(),
                         limitTextCount: 15,
                         keyboardType: TextInputType.name,
                         onChange: (changedValue) => {
@@ -81,7 +82,7 @@ class _SignupContentState extends State<SignupContent> {
                     ),
                     Expanded(
                       child: TextFieldWidget(
-                        hint: "Last Name",
+                        hint: "l_name".tr(),
                         limitTextCount: 15,
                         keyboardType: TextInputType.name,
                         onChange: (changedValue) => {
@@ -107,7 +108,7 @@ class _SignupContentState extends State<SignupContent> {
                   controller: widget.signupVM.emailController,
                 ),
                 TextFieldWidget(
-                  hint: "Password at least 6 characters",
+                  hint: "pass_hint".tr(),
                   keyboardType: TextInputType.text,
                   onChange: (changedValue) => {
                     widget.signupVM.fieldUpdate(changedValue,
@@ -117,7 +118,7 @@ class _SignupContentState extends State<SignupContent> {
                   controller: widget.signupVM.passwordController,
                 ),
                 ButtonOriginal(
-                  text: "Signup",
+                  text: "signup".tr(),
                   bgColor: kPrimaryColor,
                   txtColor: Colors.white,
                   onPress: () => widget.signupVM.signUpPre(
@@ -137,8 +138,8 @@ class _SignupContentState extends State<SignupContent> {
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                 onTap: () => widget.signupVM.goToLogin(context),
-                child: const Text(
-                  "Already a member? Login now",
+                child: Text(
+                  "alrdy_mem".tr(),
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: 17,
@@ -160,7 +161,7 @@ class _SignupContentState extends State<SignupContent> {
                   );
                 },
                 child: Text(
-                  "Terms and conditions",
+                  "trms".tr(),
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: 12,
@@ -197,12 +198,12 @@ class _SignupContentState extends State<SignupContent> {
           Icons.camera_alt,
           color: Colors.red,
         ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
-        cameraText: const Text(
-          "From Camera",
+        cameraText: Text(
+          "frm_cam".tr(),
           style: TextStyle(color: Colors.red),
         ),
-        galleryText: const Text(
-          "From Gallery",
+        galleryText: Text(
+          "frm_galry".tr(),
           style: TextStyle(color: kPrimaryColor),
         ));
     finish(image);

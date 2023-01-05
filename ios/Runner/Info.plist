@@ -56,5 +56,33 @@
      <string>We use it in image capture to add images</string>
 	 	  <key>NSMicrophoneUsageDescription</key>
      <string>We use it in audio calls</string>
+<key>NSUserTrackingUsageDescription</key>
+<string>This identifier will be used to deliver personalized ads to you.</string>
+
+<!-- Replace this with your Admob ID -->
+	 <key>GADApplicationIdentifier</key>
+<string>ca-app-pub-3940256099942544~1458002511</string>
+
+<key>io.flutter.embedded_views_preview</key>
+<true/>
+
+<key>CFBundleLocalizations</key>
+<array>
+	<string>en</string>
+	<string>ar</string>
+	<string>de</string>
+	<string>es</string>
+	<string>fr</string>
+	<string>hi</string>
+	<string>in</string>
+	<string>ko</string>
+	<string>ms</string>
+	<string>pt</string>
+	<string>ru</string>
+	<string>tr</string>
+	<string>uk</string>
+</array>
+
+
 </dict>
 </plist>

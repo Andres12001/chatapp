@@ -1,21 +1,29 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/Constants/Constants.dart';
+import 'package:first_app/View/Admin/Screens/AdminView.dart';
+import 'package:first_app/View/Auth/Screens/WelcomeView.dart';
 import 'package:first_app/View/Home/Screens/HistoryView.dart';
 import 'package:first_app/View/Home/Screens/ScheduleView.dart';
 import 'package:first_app/View/Home/Screens/SettingsView.dart';
 import 'package:first_app/ViewModel/Home/HomeVM.dart';
+import 'package:first_app/ViewModel/MainVM.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../../../Ads/AdmobClass.dart';
 import '../../../Constants/TabbarConst.dart';
 import '../../../Helpers/FirebaseAuthMethods.dart';
+import '../../../Helpers/FirebaseMethods.dart';
 import '../../../Helpers/ListenedValues.dart';
 import '../../../Helpers/NavigationService.dart';
 import '../../../ViewModel/Home/HistoryVM.dart';
-import '../../../ViewModel/Home/ScheduleVM.dart';
 import '../../Auth/Widgets/AvatarCustom.dart';
 import '../Tabbar/BottomBarView.dart';
 import '../Widgets/HomeContent.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class HomeView extends StatefulWidget {
   HomeView({super.key});
@@ -42,6 +50,13 @@ class _HomeViewState extends State<HomeView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget._homeVM.scrollAnimated(widget.scrollController, 38);
     });
+    MainVM.shared.performAdmineUser(context);
+    if (myId == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, WelcomeView.screenRouteName, (route) => false);
+      });
+    }
   }
 
   @override
@@ -74,23 +89,64 @@ class _HomeViewState extends State<HomeView> {
         elevation: 0,
         backgroundColor: kPrimaryColor,
         title: Text(
-          "Metix",
+          "app_name".tr(),
           style: GoogleFonts.lobster(
               textStyle: const TextStyle(color: Colors.white)),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Center(
-              child: AvatarCustom(
-                isLocal: false,
-                url: FirebaseAuthMethods.getMyPhoto(),
-                name: FirebaseAuthMethods.getMyname(),
-                onPress: () => {widget._homeVM.onTabTapped(3, context)},
-                radius: 40,
+          Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, AdminView.screenRouteName);
+                },
+                child: kIsWeb
+                    ? Provider.of<ListenedValues>(context).isAdmin
+                        ? Row(
+                            children: [
+                              Icon(
+                                Icons.admin_panel_settings,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              if (kIsWeb)
+                                Text(
+                                  "admn_pnl".tr(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              else
+                                Container(),
+                            ],
+                          )
+                        : Container()
+                    : Container(),
               ),
-            ),
-          )
+              const SizedBox(
+                width: 5,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 10, left: 10),
+                child: Center(
+                  child: AvatarCustom(
+                    isLocal: false,
+                    url: FirebaseAuthMethods.getMyPhoto(),
+                    name: FirebaseAuthMethods.getMyname(),
+                    onPress: () {
+                      AdmobClass.shared.showInitAd();
+                      widget._homeVM.onTabTapped(3, context);
+                    },
+                    radius: 40,
+                  ),
+                ),
+              )
+            ],
+          ),
         ],
       ),
       backgroundColor: kBackgroundColor,

@@ -7,6 +7,7 @@ import '../../Helpers/FirebaseMethods.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/Models/User.dart' as dbUser;
 import '../../Helpers/ListenedValues.dart';
+import '../../View/Auth/Screens/WelcomeView.dart';
 
 class SettingsVM {
   FirebaseMethods _firebaseMethods = FirebaseMethods();
@@ -19,6 +20,15 @@ class SettingsVM {
   }
 
   SettingsVM() {
+    if (myId == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(
+            NavigationService.navigatorKey.currentContext!,
+            WelcomeView.screenRouteName,
+            (route) => false);
+      });
+      return;
+    }
     getmyUser(NavigationService.navigatorKey.currentContext!);
   }
   void getmyUser(BuildContext context) {

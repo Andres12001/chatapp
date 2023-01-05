@@ -1,4 +1,6 @@
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:first_app/Ads/AdmobClass.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Helpers/ListenedValues.dart';
 import 'package:first_app/ViewModel/Auth/LoginVM.dart';
@@ -6,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Helpers/FirebaseMethods.dart';
+import '../../Home/Screens/HomeView.dart';
 import '../Widgets/LoginContent.dart';
 import '../Widgets/WelcomeHeader.dart';
 
@@ -25,7 +29,7 @@ class LoginView extends StatelessWidget {
         elevation: 0,
         backgroundColor: kPrimaryColor,
         title: Text(
-          "Metix",
+          "app_name".tr(),
           style: GoogleFonts.lobster(
               textStyle: const TextStyle(color: Colors.white)),
         ),
@@ -49,9 +53,10 @@ class LoginView extends StatelessWidget {
                     //main container
                     WelcomeHeader(
                       size: size,
-                      title: 'Login',
+                      title: 'login'.tr(),
                     ),
-                    LoginContent(loginVM: _loginVM)
+                    LoginContent(loginVM: _loginVM),
+                    AdmobClass.shared.displayAdBanner()
                     //overlay container
                   ]),
                 ),

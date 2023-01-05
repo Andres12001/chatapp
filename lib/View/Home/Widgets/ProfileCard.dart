@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/View/Auth/Widgets/AvatarCustom.dart';
 import 'package:flutter/material.dart';
 
@@ -95,12 +96,12 @@ class ProfileCard extends StatelessWidget {
           Icons.camera_alt,
           color: Colors.red,
         ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
-        cameraText: const Text(
-          "From Camera",
+        cameraText: Text(
+          "frm_cam".tr(),
           style: TextStyle(color: Colors.red),
         ),
-        galleryText: const Text(
-          "From Gallery",
+        galleryText: Text(
+          "frm_galry".tr(),
           style: TextStyle(color: kPrimaryColor),
         ));
     finish(image);

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +13,8 @@ import '../../Auth/Sheets/TermsSheetView.dart';
 import '../../Auth/Widgets/ButtonOriginal.dart';
 import '../../Auth/Widgets/TextFieldWidget.dart';
 
-class CreateSheetContent extends StatelessWidget {
-  const CreateSheetContent({super.key, required this.createSheetVM});
+class CreateMeetingContent extends StatelessWidget {
+  const CreateMeetingContent({super.key, required this.createSheetVM});
 
   final CreateSheetVM createSheetVM;
   @override
@@ -61,21 +62,21 @@ class CreateSheetContent extends StatelessWidget {
                       SizedBox(
                           width: (MediaQuery.of(context).size.width - 36) / 2,
                           child: Text(
-                            "Voice Meeting",
+                            "voice_meet".tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20),
                           )),
                       SizedBox(
                           width: (MediaQuery.of(context).size.width - 36) / 2,
                           child: Text(
-                            "Video Meeting",
+                            "video_meet".tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20),
                           )),
                     ],
                   ),
                   TextFieldWidget(
-                    hint: "Meeting Title",
+                    hint: "meet_title".tr(),
                     keyboardType: TextInputType.name,
                     limitTextCount: 25,
                     onChange: (changedValue) => {
@@ -86,7 +87,7 @@ class CreateSheetContent extends StatelessWidget {
                     controller: createSheetVM.titleController,
                   ),
                   TextFieldWidget(
-                    hint: "Meeting Password (optional)",
+                    hint: "meet_pass_o".tr(),
                     keyboardType: TextInputType.text,
                     onChange: (changedValue) => {
                       createSheetVM.fieldUpdate(
@@ -96,7 +97,7 @@ class CreateSheetContent extends StatelessWidget {
                     controller: createSheetVM.passwordController,
                   ),
                   ButtonOriginal(
-                    text: "Create",
+                    text: "creat".tr(),
                     bgColor: kPrimaryColor,
                     txtColor: Colors.white,
                     onPress: () => createSheetVM.createPre(
@@ -120,7 +121,7 @@ class CreateSheetContent extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    "Terms and conditions",
+                    "trms".tr(),
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: 12,

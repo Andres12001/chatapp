@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/Models/Meeting.dart';
 import 'package:first_app/View/Auth/Screens/SignupView.dart';
@@ -10,12 +11,25 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import '../../Helpers/FirebaseAuthMethods.dart';
+import '../../Helpers/NavigationService.dart';
+import '../../View/Auth/Screens/WelcomeView.dart';
 
 class CreateSheetVM {
   TextEditingController titleController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   MeetingLocalTypes meetingType = MeetingLocalTypes.groupVoiceCall;
   FirebaseAuthMethods _firebaseAuthMethods = FirebaseAuthMethods();
+
+  CreateSheetVM() {
+    if (myId == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(
+            NavigationService.navigatorKey.currentContext!,
+            WelcomeView.screenRouteName,
+            (route) => false);
+      });
+    }
+  }
 
   void fieldUpdate(String value, TextEditingController controller) {
     // controller.text = value;
@@ -34,8 +48,8 @@ class CreateSheetVM {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
-        title: 'Oops...',
-        text: "Please fill meeting title field",
+        title: 'ops'.tr(),
+        text: "fill_meeting_title".tr(),
       );
       return;
     }
@@ -44,8 +58,8 @@ class CreateSheetVM {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
-        title: 'Oops...',
-        text: "Please enter password contains at least 6 char",
+        title: 'ops'.tr(),
+        text: "fill_pass_six".tr(),
       );
       return;
     }

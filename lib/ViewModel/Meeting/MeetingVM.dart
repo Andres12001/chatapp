@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Constants/FirebaseConst.dart';
@@ -6,6 +7,7 @@ import 'package:first_app/Dics/MeetingDic.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/Models/Meeting.dart';
 import 'package:first_app/View/Home/Screens/HomeView.dart';
+import 'package:first_app/ViewModel/Home/HistoryVM.dart';
 import 'package:first_app/ViewModel/MainVM.dart';
 import 'package:flutter/material.dart';
 import 'package:locally/locally.dart';
@@ -104,7 +106,7 @@ class MeetingVM {
                       );
                       locally.schedule(
                           title: meetingTitle,
-                          message: "Your scheduled meeting started",
+                          message: "schd_meet_start".tr(),
                           duration: Provider.of<ListenedValues>(context,
                                   listen: false)
                               .scheduleDateTime!
@@ -141,7 +143,7 @@ class MeetingVM {
                   QuickAlert.show(
                     context: context,
                     type: QuickAlertType.error,
-                    title: 'Oops...',
+                    title: 'ops'.tr(),
                     text: e,
                   );
                 });
@@ -151,11 +153,10 @@ class MeetingVM {
             QuickAlert.show(
                 context: context,
                 type: QuickAlertType.error,
-                title: 'Oops...',
-                text:
-                    "You are already in meeting you can't create meeting until you leave the other meeting.",
+                title: 'ops'.tr(),
+                text: "already_meeting_leave".tr(),
                 confirmBtnColor: kPrimaryColor,
-                confirmBtnText: "Leave Meeting",
+                confirmBtnText: "lv_meet".tr(),
                 onConfirmBtnTap: () {
                   Provider.of<ListenedValues>(context, listen: false)
                       .setLoading(true);
@@ -181,7 +182,7 @@ class MeetingVM {
                         QuickAlert.show(
                           context: context,
                           type: QuickAlertType.error,
-                          title: 'Oops...',
+                          title: 'ops'.tr(),
                           text: e,
                         );
                       });
@@ -192,8 +193,8 @@ class MeetingVM {
           QuickAlert.show(
             context: context,
             type: QuickAlertType.error,
-            title: 'Oops...',
-            text: "${e}222",
+            title: 'ops'.tr(),
+            text: "${e}",
           );
         });
   }
@@ -236,8 +237,8 @@ class MeetingVM {
                     QuickAlert.show(
                       context: context,
                       type: QuickAlertType.error,
-                      title: 'Oops...',
-                      text: "Can't reach the meeting.",
+                      title: 'ops'.tr(),
+                      text: "cnt_rech_meet".tr(),
                     );
                     return;
                   }
@@ -249,8 +250,8 @@ class MeetingVM {
                     QuickAlert.show(
                       context: context,
                       type: QuickAlertType.error,
-                      title: 'Oops...',
-                      text: "Can't reach the meeting.",
+                      title: 'ops'.tr(),
+                      text: "cnt_rech_meet".tr(),
                     );
                     return;
                   }
@@ -261,8 +262,8 @@ class MeetingVM {
                     QuickAlert.show(
                       context: context,
                       type: QuickAlertType.error,
-                      title: 'Oops...',
-                      text: "Meeting password is incorrect",
+                      title: 'ops'.tr(),
+                      text: "meet_pass_inco".tr(),
                     );
                     return;
                   }
@@ -274,11 +275,11 @@ class MeetingVM {
                     QuickAlert.show(
                         context: context,
                         type: QuickAlertType.error,
-                        title: 'Oops...',
+                        title: 'ops'.tr(),
                         text: (meeting.meetingState ==
                                 MeetingStateTypes.ended.index)
-                            ? "Meeting has been ended"
-                            : "Meeting didn't start yet");
+                            ? "meet_ending".tr()
+                            : "meet_not_started".tr());
                     return;
                   }
 
@@ -330,7 +331,7 @@ class MeetingVM {
                         QuickAlert.show(
                           context: context,
                           type: QuickAlertType.error,
-                          title: 'Oops...',
+                          title: 'ops'.tr(),
                           text: e,
                         );
                       });
@@ -341,8 +342,8 @@ class MeetingVM {
                   QuickAlert.show(
                     context: context,
                     type: QuickAlertType.error,
-                    title: 'Oops...',
-                    text: "Can't reach the meeting.",
+                    title: 'ops'.tr(),
+                    text: "cnt_rech_meet".tr(),
                   );
                 });
           } else {
@@ -351,11 +352,10 @@ class MeetingVM {
             QuickAlert.show(
                 context: context,
                 type: QuickAlertType.error,
-                title: 'Oops...',
-                text:
-                    "You are already in meeting you can't create meeting until you leave the other meeting.",
+                title: 'ops'.tr(),
+                text: "already_meeting_leave".tr(),
                 confirmBtnColor: kPrimaryColor,
-                confirmBtnText: "Leave Meeting",
+                confirmBtnText: "lv_meet".tr(),
                 onConfirmBtnTap: () {
                   Provider.of<ListenedValues>(context, listen: false)
                       .setLoading(true);
@@ -379,7 +379,7 @@ class MeetingVM {
                         QuickAlert.show(
                           context: context,
                           type: QuickAlertType.error,
-                          title: 'Oops...',
+                          title: 'ops'.tr(),
                           text: e,
                         );
                       });
@@ -390,7 +390,7 @@ class MeetingVM {
           QuickAlert.show(
             context: context,
             type: QuickAlertType.error,
-            title: 'Oops...',
+            title: 'ops'.tr(),
             text: e,
           );
         });
@@ -415,7 +415,7 @@ class MeetingVM {
           meetingState = MeetingStateTypes.values[snapshot.value as int];
         }
         if (meetingState == MeetingStateTypes.ended) {
-          Navigator.pop(context);
+          //  Navigator.pop(context);
         }
       },
       onFailed: (error) {},
@@ -457,7 +457,7 @@ class MeetingVM {
           QuickAlert.show(
             context: context,
             type: QuickAlertType.error,
-            title: 'Oops...',
+            title: 'ops'.tr(),
             text: e,
           );
         });

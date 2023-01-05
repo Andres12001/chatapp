@@ -1,6 +1,7 @@
 class User {
   final String loginInfo, id, ava, nameF, nameL, statue, meetingId, loginType;
-  final bool isAdmin, ios, isprivate, verify, online, isBlocked;
+  final bool ios, isprivate, verify, online;
+  bool isBlocked, isAdmin;
 
   User(
       {required this.loginInfo,

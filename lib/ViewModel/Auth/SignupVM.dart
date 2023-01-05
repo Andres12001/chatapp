@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, curly_braces_in_flow_control_structures
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:first_app/Constants/Constants.dart';
@@ -17,6 +18,7 @@ import '../../Constants/FirebaseMessages.dart';
 import '../../Helpers/FirebaseAuthMethods.dart';
 import '../../Helpers/FirebaseMethods.dart';
 import '../../Helpers/ListenedValues.dart';
+import '../../Helpers/NavigationService.dart';
 import '../../View/Home/Screens/HomeView.dart';
 import '../MainVM.dart';
 
@@ -29,6 +31,17 @@ class SignupVM {
   var imageFinal;
   final FirebaseAuthMethods _firebaseAuthMethods = FirebaseAuthMethods();
   final FirebaseMethods _firebaseMethods = FirebaseMethods();
+
+  SignupVM() {
+    if (myId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(
+            NavigationService.navigatorKey.currentContext!,
+            HomeView.screenRouteName,
+            (route) => false);
+      });
+    }
+  }
 
   void fieldUpdate(String value, TextEditingController controller,
       Function(String) updateUI) {
@@ -46,8 +59,8 @@ class SignupVM {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
-        title: 'Oops...',
-        text: "Please fill all fields",
+        title: 'ops'.tr(),
+        text: "fill_all_fields".tr(),
       );
       return;
     }
@@ -55,8 +68,8 @@ class SignupVM {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
-        title: 'Oops...',
-        text: "Please enter password contains at least 6 char",
+        title: 'ops'.tr(),
+        text: "fill_pass_six".tr(),
       );
       return;
     }
@@ -74,7 +87,7 @@ class SignupVM {
           QuickAlert.show(
             context: context,
             type: QuickAlertType.error,
-            title: 'Oops...',
+            title: 'ops'.tr(),
             text: FirebaseMessages.getMessageFromErrorCode(e),
           );
         });
@@ -109,6 +122,7 @@ class SignupVM {
             loginInfo, id, ios, nameF, nameL, ava, loginType),
         onSucc: () {
           MainVM.shared.performBlockDeleteUser(context);
+          MainVM.shared.performAdmineUser(context);
           Provider.of<ListenedValues>(context, listen: false).setLoading(false);
 
           Navigator.pushNamedAndRemoveUntil(

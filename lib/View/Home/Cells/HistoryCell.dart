@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/Helpers/DateFormater.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/Models/Meeting.dart';
@@ -14,8 +15,7 @@ import '../../../Constants/Constants.dart';
 import '../../../ViewModel/Home/HistoryVM.dart';
 
 class HistoryCell extends StatelessWidget {
-  const HistoryCell(
-      {super.key, required this.historyItem, required this.historyVM});
+  HistoryCell({super.key, required this.historyItem, required this.historyVM});
 
   final MeetingHistory historyItem;
   final HistoryVM historyVM;
@@ -79,7 +79,7 @@ class HistoryCell extends StatelessWidget {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          "Created by : ",
+                          "crt_by".tr(),
                           maxLines: 1,
                           style: TextStyle(
                               color: kLabelColor,
@@ -110,12 +110,28 @@ class HistoryCell extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          historyItem.meeting.meetingId,
+                          maxLines: 1,
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
                     ),
                     historyItem.meeting.started
                         ? Container()
                         : ButtonOriginal(
-                            text: "Start meeting",
+                            text: "strt_meting".tr(),
                             bgColor: kPrimaryColor,
                             txtColor: Colors.white,
                             onPress: () {

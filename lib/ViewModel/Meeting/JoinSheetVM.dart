@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/Models/Meeting.dart';
@@ -30,11 +31,11 @@ class JoinSheetVM {
     // codeController.text = "4ddbab20-84f1-11ed-abe7-3555e7df4320";
 
     if (myId == null) {
-      nameController.text = "Guest";
+      nameController.text = "guest".tr();
       return;
     }
     nameController.text =
-        FirebaseAuth.instance.currentUser?.displayName ?? "Guest";
+        FirebaseAuth.instance.currentUser?.displayName ?? "guest".tr();
   }
 
   void joinPre({
@@ -47,8 +48,8 @@ class JoinSheetVM {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
-        title: 'Oops...',
-        text: "Please fill all fields",
+        title: 'ops'.tr(),
+        text: "fill_all_fields".tr(),
       );
       return;
     }
@@ -65,7 +66,7 @@ class JoinSheetVM {
             QuickAlert.show(
               context: context,
               type: QuickAlertType.error,
-              title: 'Oops...',
+              title: 'ops'.tr(),
               text: FirebaseMessages.getMessageFromErrorCode(e),
             );
           });
@@ -75,8 +76,8 @@ class JoinSheetVM {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.error,
-          title: 'Oops...',
-          text: "Error in login",
+          title: 'ops'.tr(),
+          text: "err_login".tr(),
         );
         return;
       }

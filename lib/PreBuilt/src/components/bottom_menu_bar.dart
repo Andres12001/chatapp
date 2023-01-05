@@ -2,12 +2,18 @@
 import 'dart:async';
 
 // Flutter imports:
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_app/Helpers/FirebaseMethods.dart';
+import 'package:first_app/Helpers/ListenedValues.dart';
 import 'package:first_app/PreBuilt/src/prebuilt_call_config.dart';
 import 'package:first_app/PreBuilt/src/prebuilt_call_defines.dart';
+import 'package:first_app/View/Auth/Screens/WelcomeView.dart';
+import 'package:first_app/View/Home/Screens/HomeView.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:zego_uikit/zego_uikit.dart';
 
 // Project imports:
@@ -211,7 +217,20 @@ class _ZegoBottomMenuBarState extends State<ZegoBottomMenuBar> {
             if (widget.config.onHangUp != null) {
               widget.config.onHangUp!.call();
             } else {
-              Navigator.of(context).pop();
+              // Navigator.of(context).pop();
+
+              if (myId == null) {
+                Navigator.of(context).pop();
+              } else {
+                if (FirebaseAuth.instance.currentUser!.isAnonymous) {
+                  Navigator.of(context).pop();
+                } else {
+                  Provider.of<ListenedValues>(context, listen: false)
+                      .setHomeIndex(0);
+                  Navigator.pushReplacementNamed(
+                      context, HomeView.screenRouteName);
+                }
+              }
             }
           },
         );

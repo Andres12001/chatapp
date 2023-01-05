@@ -1,37 +1,39 @@
+import 'package:easy_localization/easy_localization.dart';
+
 class FirebaseMessages {
   static String getMessageFromErrorCode(dynamic e) {
     switch (e.code) {
       case "ERROR_EMAIL_ALREADY_IN_USE":
       case "account-exists-with-different-credential":
       case "email-already-in-use":
-        return "Email already used. Go to login page.";
+        return "email-already-in-use".tr();
         break;
       case "ERROR_WRONG_PASSWORD":
       case "wrong-password":
-        return "Wrong email/password combination.";
+        return "wrong-password".tr();
         break;
       case "ERROR_USER_NOT_FOUND":
       case "user-not-found":
-        return "No user found with this email.";
+        return "user-not-found".tr();
         break;
       case "ERROR_USER_DISABLED":
       case "user-disabled":
-        return "User disabled.";
+        return "user-disabled".tr();
         break;
       case "ERROR_TOO_MANY_REQUESTS":
       case "operation-not-allowed":
-        return "Too many requests to log into this account.";
+        return "operation-not-allowed".tr();
         break;
       case "ERROR_OPERATION_NOT_ALLOWED":
       case "operation-not-allowed":
-        return "Server error, please try again later.";
+        return "operation-not-allowed".tr();
         break;
       case "ERROR_INVALID_EMAIL":
       case "invalid-email":
-        return "Email address is invalid.";
+        return "invalid-email".tr();
         break;
       default:
-        return "Login failed. Please try again.";
+        return "login-failed".tr();
         break;
     }
   }

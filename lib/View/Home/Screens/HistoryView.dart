@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Constants/Constants.dart';
+import '../../../Helpers/FirebaseMethods.dart';
 import '../../../Helpers/ListenedValues.dart';
 import '../../../ViewModel/Home/HistoryVM.dart';
+import '../../Auth/Screens/WelcomeView.dart';
 import '../../Auth/Widgets/ButtonOriginal.dart';
 
 class HistoryView extends StatelessWidget {

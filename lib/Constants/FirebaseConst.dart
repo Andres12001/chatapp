@@ -8,6 +8,8 @@ class FirebaseConst {
   static const MEETING_STARTED = "started";
   static const TIME_CHILD = "time";
   static const IS_BLCOKED = "isBlocked";
+  static const IS_ADMIN = "isAdmin";
+
   static const AVA_DB = "ava";
 
   // static const USERS = "Users";
@@ -22,4 +24,5 @@ class FirebaseConst {
   static const LISTNER_MEETING_END = "meeetingEndListner";
   static const LISTNER_HISTORY_LIST = "meeetingEndListner";
   static const LISTNER_BlOCK_DELETE = "userBlocked";
+  static const LISTNER_IS_ADMIN = "userAdmin";
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/ViewModel/Auth/LoginVM.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -48,7 +49,7 @@ class LoginContent extends StatelessWidget {
                       controller: loginVM.emailController,
                     ),
                     TextFieldWidget(
-                      hint: "Password at least 6 characters",
+                      hint: "pass_hint".tr(),
                       keyboardType: TextInputType.text,
                       onChange: (changedValue) => {
                         loginVM.fieldUpdate(
@@ -58,7 +59,7 @@ class LoginContent extends StatelessWidget {
                       controller: loginVM.passwordController,
                     ),
                     ButtonOriginal(
-                      text: "Login",
+                      text: "login".tr(),
                       bgColor: kPrimaryColor,
                       txtColor: Colors.white,
                       onPress: () => loginVM.loginPre(
@@ -76,8 +77,8 @@ class LoginContent extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(
                   onTap: () => loginVM.goToSignup(context),
-                  child: const Text(
-                    "Not a member yet? Signup now",
+                  child: Text(
+                    "nt_mmbr_signup".tr(),
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: 17,
@@ -99,7 +100,7 @@ class LoginContent extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    "Terms and conditions",
+                    "trms".tr(),
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: 12,

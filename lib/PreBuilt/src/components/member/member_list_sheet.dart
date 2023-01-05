@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -70,7 +71,7 @@ class _ZegoMemberListSheetState extends State<ZegoMemberListSheet> {
           ),
           SizedBox(width: 10.r),
           Text(
-            "Member",
+            "members".tr(),
             style: TextStyle(
               fontSize: 36.0.r,
               color: const Color(0xffffffff),

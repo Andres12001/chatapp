@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
+import 'package:first_app/Helpers/NavigationService.dart';
 import 'package:first_app/View/Auth/Screens/SignupView.dart';
 import 'package:first_app/View/Auth/Screens/WelcomeView.dart';
 import 'package:first_app/View/Home/Screens/HomeView.dart';
@@ -24,6 +26,16 @@ class LoginVM {
   void fieldUpdate(String value, TextEditingController controller) {
     // controller.text = value;
   }
+  LoginVM() {
+    if (myId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(
+            NavigationService.navigatorKey.currentContext!,
+            HomeView.screenRouteName,
+            (route) => false);
+      });
+    }
+  }
 
   void loginPre({
     required String email,
@@ -34,8 +46,8 @@ class LoginVM {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
-        title: 'Oops...',
-        text: "Please fill all fields",
+        title: 'ops'.tr(),
+        text: "fill_all_fields".tr(),
       );
       return;
     }
@@ -62,11 +74,12 @@ class LoginVM {
                   QuickAlert.show(
                     context: context,
                     type: QuickAlertType.error,
-                    title: 'Oops...',
-                    text: "This account has been blocked from our system",
+                    title: 'ops'.tr(),
+                    text: "acc_blocked".tr(),
                   );
                 } else {
                   MainVM.shared.performBlockDeleteUser(context);
+                  MainVM.shared.performAdmineUser(context);
                   Provider.of<ListenedValues>(context, listen: false)
                       .setLoading(false);
 
@@ -80,7 +93,7 @@ class LoginVM {
                 QuickAlert.show(
                   context: context,
                   type: QuickAlertType.error,
-                  title: 'Oops...',
+                  title: 'ops'.tr(),
                   text: FirebaseMessages.getMessageFromErrorCode(e),
                 );
               });
@@ -90,7 +103,7 @@ class LoginVM {
           QuickAlert.show(
             context: context,
             type: QuickAlertType.error,
-            title: 'Oops...',
+            title: 'ops'.tr(),
             text: FirebaseMessages.getMessageFromErrorCode(e),
           );
         });

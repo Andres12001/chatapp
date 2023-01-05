@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:first_app/Ads/AdmobClass.dart';
 import 'package:first_app/View/Meeting/Sheets/CreateSheetView.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -22,38 +24,31 @@ class HomeRow extends StatelessWidget {
             HomeMainButton(
                 bgColor: Colors.white,
                 icon: Icons.join_full,
-                text: "Join Meeting",
+                text: "jin_meet".tr(),
                 txtColor: kPrimaryColor,
                 onPress: (() {
-                  showCupertinoModalBottomSheet(
-                    context: context,
-                    expand: true,
-                    builder: (context) => JoinSheetView(),
-                  );
+                  AdmobClass.shared.showInitAd();
+                  Navigator.pushNamed(context, JoinMeetingView.screenRouteName);
                 })),
             HomeMainButton(
                 bgColor: Colors.white,
                 icon: Icons.add_circle,
-                text: "Create Meeting",
+                text: "crt_meet".tr(),
                 txtColor: kPrimaryColor,
                 onPress: (() {
-                  showCupertinoModalBottomSheet(
-                    context: context,
-                    expand: true,
-                    builder: (context) => CreateSheetView(),
-                  );
+                  AdmobClass.shared.showInitAd();
+                  Navigator.pushNamed(
+                      context, CreateMeetingView.screenRouteName);
                 })),
             HomeMainButton(
                 bgColor: Colors.white,
                 icon: Icons.alarm_add,
-                text: "Schedule meeting",
+                text: "schd_meet".tr(),
                 txtColor: kPrimaryColor,
                 onPress: (() {
-                  showCupertinoModalBottomSheet(
-                    context: context,
-                    expand: true,
-                    builder: (context) => ScheduleSheetView(),
-                  );
+                  AdmobClass.shared.showInitAd();
+                  Navigator.pushNamed(
+                      context, ScheduleMeetingView.screenRouteName);
                 }))
           ],
         ),

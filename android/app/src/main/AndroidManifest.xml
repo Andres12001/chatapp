@@ -1,9 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.first_app">
-   <application
-        android:label="Metix"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+
+
              <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
@@ -23,7 +21,21 @@
    <uses-permission android:name="android.permission.VIBRATE"/>
 
 
-<receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+
+   <application
+        android:label="Metix"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+
+<!-- Replace this with your Admob ID -->
+ <meta-data
+      android:name="com.google.android.gms.ads.APPLICATION_ID"
+      android:value="ca-app-pub-3940256099942544~3347511713"/>
+
+
+<receiver 
+ android:name= "com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+ android:exported = "true" >
     <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED"></action>
     </intent-filter>

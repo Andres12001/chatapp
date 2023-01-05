@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/ViewModel/Meeting/ScheduleSheetVM.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -12,8 +13,8 @@ import '../../Auth/Sheets/TermsSheetView.dart';
 import '../../Auth/Widgets/ButtonOriginal.dart';
 import '../../Auth/Widgets/TextFieldWidget.dart';
 
-class ScheduleSheetContent extends StatelessWidget {
-  const ScheduleSheetContent({super.key, required this.scheduleSheetVM});
+class ScheduleMeetingContent extends StatelessWidget {
+  const ScheduleMeetingContent({super.key, required this.scheduleSheetVM});
 
   final ScheduleSheetVM scheduleSheetVM;
   @override
@@ -61,21 +62,21 @@ class ScheduleSheetContent extends StatelessWidget {
                       SizedBox(
                           width: (MediaQuery.of(context).size.width - 36) / 2,
                           child: Text(
-                            "Voice Meeting",
+                            "voice_meet".tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20),
                           )),
                       SizedBox(
                           width: (MediaQuery.of(context).size.width - 36) / 2,
                           child: Text(
-                            "Video Meeting",
+                            "video_meet".tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20),
                           )),
                     ],
                   ),
                   TextFieldWidget(
-                    hint: "Meeting Title",
+                    hint: "meet_title".tr(),
                     keyboardType: TextInputType.name,
                     limitTextCount: 25,
                     onChange: (changedValue) => {
@@ -86,7 +87,7 @@ class ScheduleSheetContent extends StatelessWidget {
                     controller: scheduleSheetVM.titleController,
                   ),
                   TextFieldWidget(
-                    hint: "Meeting Password (optional)",
+                    hint: "meet_pass_o".tr(),
                     keyboardType: TextInputType.text,
                     onChange: (changedValue) => {
                       scheduleSheetVM.fieldUpdate(
@@ -102,7 +103,7 @@ class ScheduleSheetContent extends StatelessWidget {
                       text: Provider.of<ListenedValues>(context)
                                   .scheduleDateTime ==
                               null
-                          ? "Choose Date Time"
+                          ? "chose_date_time".tr()
                           : scheduleSheetVM.formateDate(
                               Provider.of<ListenedValues>(context)
                                   .scheduleDateTime!),
@@ -115,7 +116,7 @@ class ScheduleSheetContent extends StatelessWidget {
                     height: 10,
                   ),
                   ButtonOriginal(
-                    text: "Schedule",
+                    text: "schedl".tr(),
                     bgColor: kPrimaryColor,
                     txtColor: Colors.white,
                     onPress: () => scheduleSheetVM.createPre(
@@ -139,7 +140,7 @@ class ScheduleSheetContent extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    "Terms and conditions",
+                    "trms".tr(),
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: 12,

@@ -1,16 +1,18 @@
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Helpers/ListenedValues.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Ads/AdmobClass.dart';
 import '../../../ViewModel/Meeting/JoinSheetVM.dart';
 import 'JoinSheetContent.dart';
 import '../../Auth/Widgets/WelcomeHeader.dart';
 
-class JoinSheetView extends StatelessWidget {
-  JoinSheetView({super.key});
+class JoinMeetingView extends StatelessWidget {
+  JoinMeetingView({super.key});
   static const String screenRouteName = "/JoinSheet";
 
   final JoinSheetVM _joinSheetVM = JoinSheetVM();
@@ -25,7 +27,7 @@ class JoinSheetView extends StatelessWidget {
         elevation: 0,
         backgroundColor: kPrimaryColor,
         title: Text(
-          "Metix",
+          "app_name".tr(),
           style: GoogleFonts.lobster(
               textStyle: const TextStyle(color: Colors.white)),
         ),
@@ -49,10 +51,12 @@ class JoinSheetView extends StatelessWidget {
                     //main container
                     WelcomeHeader(
                       size: size,
-                      title: 'Join Meeting',
+                      title: 'jin_meet'.tr(),
                       fontSize: 50,
                     ),
-                    JoinSheetContent(joinSheetVM: _joinSheetVM)
+                    JoinMeetingContent(joinSheetVM: _joinSheetVM),
+                    AdmobClass.shared.displayAdBanner()
+
                     //overlay container
                   ]),
                 ),

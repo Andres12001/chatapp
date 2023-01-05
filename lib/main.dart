@@ -1,7 +1,11 @@
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:first_app/Ads/AdmobClass.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Helpers/ListenedValues.dart';
+import 'package:first_app/View/Admin/Screens/AdminView.dart';
 import 'package:first_app/View/Auth/Sheets/PolicySheetView.dart';
 import 'package:first_app/View/Auth/Sheets/TermsSheetView.dart';
 import 'package:first_app/View/Home/Screens/HistoryView.dart';
@@ -27,10 +31,37 @@ import 'package:flutter_fgbg/flutter_fgbg.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  Admob.initialize();
+
+  runApp(
+    EasyLocalization(
+        supportedLocales: const [
+          Locale('en'),
+          Locale('ar'),
+          Locale('de'),
+          Locale('es'),
+          Locale('fr'),
+          Locale('hi'),
+          Locale('in'),
+          Locale('ko'),
+          Locale('ms'),
+          Locale('pt'),
+          Locale('ru'),
+          Locale('tr'),
+          Locale('uk')
+        ],
+        useOnlyLangCode: true,
+        path:
+            'assets/translations', // <-- change the path of the translation files
+        fallbackLocale: const Locale('en'),
+        child: const MyApp()),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -45,6 +76,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final MainVM _mainVM = MainVM.shared;
   final MeetingVM _meetingVM = MeetingVM.shared;
+  final AdmobClass _admobClass = AdmobClass.shared;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // events.add(state.toString());
@@ -71,6 +103,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         child: ChangeNotifierProvider(
           create: (context) => ListenedValues(),
           child: MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             navigatorKey: NavigationService.navigatorKey,
             theme: ThemeData(
               primaryColor: kPrimaryColor,
@@ -86,15 +121,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               SignupView.screenRouteName: (context) => SignupView(),
               HomeView.screenRouteName: (context) => HomeView(),
               MeetingView.screenRouteName: (context) => MeetingView(),
-              JoinSheetView.screenRouteName: (context) => JoinSheetView(),
-              TermsSheetView.screenRouteName: (context) => TermsSheetView(),
-              CreateSheetView.screenRouteName: (context) => CreateSheetView(),
-              ScheduleSheetView.screenRouteName: (context) =>
-                  ScheduleSheetView(),
+              JoinMeetingView.screenRouteName: (context) =>
+                  JoinMeetingView(), //open
+              TermsSheetView.screenRouteName: (context) =>
+                  TermsSheetView(), //open
+              CreateMeetingView.screenRouteName: (context) =>
+                  CreateMeetingView(),
+              ScheduleMeetingView.screenRouteName: (context) =>
+                  ScheduleMeetingView(),
               // ScheduleView.screenRouteName: (context) => ScheduleView(),
               // HistoryView.screenRouteName: (context) => HistoryView(historyVM: null,),
               SettingsView.screenRouteName: (context) => SettingsView(),
-              PolicySheetView.screenRouteName: (context) => PolicySheetView(),
+              PolicySheetView.screenRouteName: (context) =>
+                  PolicySheetView(), //open
+              //Admin
+              AdminView.screenRouteName: (context) => AdminView(),
             },
           ),
         ));

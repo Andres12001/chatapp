@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
@@ -21,11 +23,9 @@ class MainVM {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       myId = user?.uid;
       if (user == null) {
-        print("user signout");
         performSignout(
             NavigationService.navigatorKey.currentContext ?? context);
       } else {
-        print("user signin");
         FirebaseMethods.onlineControl(true);
       }
     });
@@ -51,10 +51,29 @@ class MainVM {
             performSignout(
                 NavigationService.navigatorKey.currentContext ?? context);
           }
-
-          print("Blockkkked : $isBlocked");
         },
         listnerMapkey: FirebaseConst.LISTNER_BlOCK_DELETE,
+        onFailed: (onFailed) {});
+  }
+
+  void performAdmineUser(BuildContext context) {
+    if (myId == null) {
+      return;
+    }
+
+    _firebaseMethods.getListnerOnData(
+        childPath: "${FirebaseConst.USERS}/${myId!}/${FirebaseConst.IS_ADMIN}",
+        onSucc: (snapshot) {
+          late bool isAdmin;
+
+          if (snapshot.value is! bool) {
+            isAdmin = false;
+          } else {
+            isAdmin = snapshot.value as bool;
+          }
+          Provider.of<ListenedValues>(context, listen: false).setAdmin(isAdmin);
+        },
+        listnerMapkey: FirebaseConst.LISTNER_IS_ADMIN,
         onFailed: (onFailed) {});
   }
 

@@ -1,4 +1,5 @@
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/Constants/Constants.dart';
 
 import 'package:first_app/ViewModel/Auth/SignupVM.dart';
@@ -6,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Ads/AdmobClass.dart';
+import '../../../Helpers/FirebaseMethods.dart';
 import '../../../Helpers/ListenedValues.dart';
+import '../../Home/Screens/HomeView.dart';
 import '../Widgets/SignupContent.dart';
 import '../Widgets/WelcomeHeader.dart';
 
@@ -26,7 +30,7 @@ class SignupView extends StatelessWidget {
         elevation: 0,
         backgroundColor: kPrimaryColor,
         title: Text(
-          "Metix",
+          "app_name".tr(),
           style: GoogleFonts.lobster(
               textStyle: const TextStyle(color: Colors.white)),
         ),
@@ -50,9 +54,11 @@ class SignupView extends StatelessWidget {
                     //main container
                     WelcomeHeader(
                       size: size,
-                      title: 'Signup',
+                      title: 'signup'.tr(),
                     ),
-                    SignupContent(signupVM: _signupVM)
+                    SignupContent(signupVM: _signupVM),
+                    AdmobClass.shared.displayAdBanner()
+
                     //overlay container
                   ]),
                 ),

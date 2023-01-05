@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/ViewModel/Auth/WelcomeVM.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class WelcomeContent extends StatelessWidget {
                 height: 40,
               ),
               ButtonsStretch(
-                text: "Login",
+                text: "login".tr(),
                 bgColor: kPrimaryColor,
                 txtColor: Colors.white,
                 onPress: () => welcomeVM.navigationRoute(
@@ -52,7 +53,7 @@ class WelcomeContent extends StatelessWidget {
                 height: 10,
               ),
               ButtonsStretch(
-                text: "Signup",
+                text: "signup".tr(),
                 bgColor: Colors.green,
                 txtColor: Colors.white,
                 onPress: () => welcomeVM.navigationRoute(
@@ -63,15 +64,11 @@ class WelcomeContent extends StatelessWidget {
                 height: 10,
               ),
               ButtonsStretch(
-                text: "Join Meeting",
+                text: "jin_meet".tr(),
                 bgColor: kBackgroundColor,
                 txtColor: kPrimaryColor,
                 onPress: () {
-                  showCupertinoModalBottomSheet(
-                    context: context,
-                    expand: true,
-                    builder: (context) => JoinSheetView(),
-                  );
+                  Navigator.pushNamed(context, JoinMeetingView.screenRouteName);
                 },
                 icon: Icons.join_full,
               ),
@@ -86,7 +83,7 @@ class WelcomeContent extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    "Terms and conditions",
+                    "trms".tr(),
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: 12,

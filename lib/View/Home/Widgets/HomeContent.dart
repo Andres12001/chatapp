@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/Helpers/NavigationService.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import '../../../Ads/AdmobClass.dart';
 import '../../../Constants/Constants.dart';
 import '../../../Helpers/ListenedValues.dart';
 import '../../../Models/Meeting.dart';
@@ -56,7 +58,7 @@ class HomeContent extends StatelessWidget {
                         height: 20,
                       ),
                       Text(
-                        "Your recent Meeting",
+                        "yr_recent_meet".tr(),
                         textAlign: TextAlign.start,
                         maxLines: 1,
                         style: TextStyle(
@@ -68,7 +70,7 @@ class HomeContent extends StatelessWidget {
                         height: 20,
                       ),
                       Provider.of<ListenedValues>(context).recentMeeting == null
-                          ? Text("No recent meeting to show",
+                          ? Text("no_rece_meet".tr(),
                               style:
                                   TextStyle(fontSize: 15, color: Colors.grey))
                           : InkWell(
@@ -101,9 +103,8 @@ class HomeContent extends StatelessWidget {
                                   QuickAlert.show(
                                     context: context,
                                     type: QuickAlertType.error,
-                                    title: 'Oops...',
-                                    text:
-                                        "This meeting can't be joined again because it has been ended",
+                                    title: 'ops'.tr(),
+                                    text: "cnt_ended_meet".tr(),
                                   );
                                 }
                               },
@@ -116,6 +117,7 @@ class HomeContent extends StatelessWidget {
                             ),
                     ],
                   ),
+                  AdmobClass.shared.displayAdBanner()
                 ]),
               ),
             ),

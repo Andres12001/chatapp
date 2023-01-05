@@ -1,7 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:first_app/Constants/Constants.dart';
+import 'package:first_app/Helpers/FirebaseMethods.dart';
+import 'package:first_app/View/Home/Screens/HomeView.dart';
 import 'package:first_app/ViewModel/Auth/WelcomeVM.dart';
 import 'package:flutter/material.dart';
 
+import '../../../Ads/AdmobClass.dart';
 import '../Widgets/WelcomeContent.dart';
 import '../Widgets/WelcomeHeader.dart';
 
@@ -33,9 +37,11 @@ class WelcomeView extends StatelessWidget {
                   //main container
                   WelcomeHeader(
                     size: size,
-                    title: 'Metix',
+                    title: 'app_name'.tr(),
                   ),
-                  WelcomeContent(welcomeVM: _welcomeVM)
+                  WelcomeContent(welcomeVM: _welcomeVM),
+                  AdmobClass.shared.displayAdBanner()
+
                   //overlay container
                 ]),
               ),
