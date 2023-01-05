@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
 import 'package:first_app/Models/Meeting.dart';
 import 'package:first_app/View/Auth/Screens/SignupView.dart';
@@ -26,7 +27,8 @@ class ScheduleSheetVM {
   FirebaseAuthMethods _firebaseAuthMethods = FirebaseAuthMethods();
 
   ScheduleSheetVM() {
-    if (myId == null) {
+    if (myId == null ||
+        (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushNamedAndRemoveUntil(
             NavigationService.navigatorKey.currentContext!,

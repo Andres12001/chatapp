@@ -2,6 +2,7 @@
 
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/View/Admin/Screens/AdminView.dart';
 import 'package:first_app/View/Auth/Screens/WelcomeView.dart';
@@ -51,7 +52,8 @@ class _HomeViewState extends State<HomeView> {
       widget._homeVM.scrollAnimated(widget.scrollController, 38);
     });
     MainVM.shared.performAdmineUser(context);
-    if (myId == null) {
+    if (myId == null ||
+        (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushNamedAndRemoveUntil(
             context, WelcomeView.screenRouteName, (route) => false);

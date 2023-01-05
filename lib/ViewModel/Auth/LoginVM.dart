@@ -27,7 +27,8 @@ class LoginVM {
     // controller.text = value;
   }
   LoginVM() {
-    if (myId != null) {
+    if (myId != null &&
+        !(FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushNamedAndRemoveUntil(
             NavigationService.navigatorKey.currentContext!,

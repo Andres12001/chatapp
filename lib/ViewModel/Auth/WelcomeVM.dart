@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/Helpers/NavigationService.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,8 @@ class WelcomeVM {
   }
 
   WelcomeVM() {
-    if (myId != null) {
+    if (myId != null &&
+        !(FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushNamedAndRemoveUntil(
             NavigationService.navigatorKey.currentContext!,

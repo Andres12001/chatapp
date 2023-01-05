@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Constants/FirebaseConst.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
-import 'package:first_app/Models/User.dart';
+import 'package:first_app/Models/User.dart' as dbUser;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Helpers/ListenedValues.dart';
@@ -13,7 +14,8 @@ import '../../View/Auth/Screens/WelcomeView.dart';
 class HistoryVM {
   final FirebaseMethods _firebaseMethods = FirebaseMethods();
   HistoryVM(BuildContext context, bool isSchedule) {
-    if (myId == null) {
+    if (myId == null ||
+        (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushNamedAndRemoveUntil(
             context, WelcomeView.screenRouteName, (route) => false);
@@ -106,8 +108,8 @@ class HistoryVM {
             return;
           }
 
-          var user = User.transformUser(userMap);
-          if (user is! User) {
+          var user = dbUser.User.transformUser(userMap);
+          if (user is! dbUser.User) {
             Provider.of<ListenedValues>(context, listen: false)
                 .setLoading(false);
             return;

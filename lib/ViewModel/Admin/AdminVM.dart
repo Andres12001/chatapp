@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/Constants/Constants.dart';
 import 'package:first_app/Constants/FirebaseConst.dart';
 import 'package:first_app/Helpers/FirebaseMethods.dart';
-import 'package:first_app/Models/User.dart';
+import 'package:first_app/Models/User.dart' as dbUser;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -19,7 +20,8 @@ class AdminVM {
     if (myId == null ||
         !Provider.of<ListenedValues>(
                 NavigationService.navigatorKey.currentContext!)
-            .isAdmin) {
+            .isAdmin ||
+        (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushNamedAndRemoveUntil(
             NavigationService.navigatorKey.currentContext!,
@@ -84,8 +86,8 @@ class AdminVM {
             return;
           }
 
-          var user = User.transformUser(userMap);
-          if (user is! User) {
+          var user = dbUser.User.transformUser(userMap);
+          if (user is! dbUser.User) {
             Provider.of<ListenedValues>(context, listen: false)
                 .setLoading(false);
             return;
@@ -126,8 +128,8 @@ class AdminVM {
               return;
             }
 
-            var user = User.transformUser(userMap);
-            if (user is! User) {
+            var user = dbUser.User.transformUser(userMap);
+            if (user is! dbUser.User) {
               Provider.of<ListenedValues>(context, listen: false)
                   .setLoading(false);
               return;
