@@ -7,7 +7,7 @@ class WelcomeHeader extends StatelessWidget {
       {super.key, required this.size, required this.title, this.fontSize = 60});
   final Size size;
   final String title;
-  double fontSize = 60;
+  double fontSize = 45;
   @override
   Widget build(BuildContext context) {
     return Container(

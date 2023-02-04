@@ -54,7 +54,7 @@ class ScheduleMeetingView extends StatelessWidget {
                     WelcomeHeader(
                       size: size,
                       title: 'schd_meet'.tr(),
-                      fontSize: 40,
+                      fontSize: 30,
                     ),
                     ScheduleMeetingContent(scheduleSheetVM: _scheduleSheetVM),
                     AdmobClass.shared.displayAdBanner()

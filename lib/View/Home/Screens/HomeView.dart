@@ -52,13 +52,13 @@ class _HomeViewState extends State<HomeView> {
       widget._homeVM.scrollAnimated(widget.scrollController, 38);
     });
     MainVM.shared.performAdmineUser(context);
-    if (myId == null ||
-        (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, WelcomeView.screenRouteName, (route) => false);
-      });
-    }
+    // if (myId == null ||
+    //     (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     Navigator.pushNamedAndRemoveUntil(
+    //         context, WelcomeView.screenRouteName, (route) => false);
+    //   });
+    // }
   }
 
   @override
@@ -99,36 +99,34 @@ class _HomeViewState extends State<HomeView> {
           Row(
             children: [
               InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AdminView.screenRouteName);
-                },
-                child: kIsWeb
-                    ? Provider.of<ListenedValues>(context).isAdmin
-                        ? Row(
-                            children: [
-                              Icon(
-                                Icons.admin_panel_settings,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              if (kIsWeb)
-                                Text(
-                                  "admn_pnl".tr(),
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              else
-                                Container(),
-                            ],
-                          )
-                        : Container()
-                    : Container(),
-              ),
+                  onTap: () {
+                    Navigator.pushNamed(context, AdminView.screenRouteName);
+                  },
+                  child:
+                      Provider.of<ListenedValues>(context, listen: true).isAdmin
+                          ? Row(
+                              children: [
+                                Icon(
+                                  Icons.admin_panel_settings,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                if (kIsWeb)
+                                  Text(
+                                    "admn_pnl".tr(),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                else
+                                  Container(),
+                              ],
+                            )
+                          : Container()),
               const SizedBox(
                 width: 5,
               ),
@@ -161,7 +159,8 @@ class _HomeViewState extends State<HomeView> {
         homeVM: widget._homeVM,
       ),
       body: BlurryModalProgressHUD(
-        inAsyncCall: Provider.of<ListenedValues>(context).isLoading,
+        inAsyncCall:
+            Provider.of<ListenedValues>(context, listen: true).isLoading,
         blurEffectIntensity: 4,
         progressIndicator:
             const CircularProgressIndicator(color: kPrimaryColor),
@@ -170,8 +169,9 @@ class _HomeViewState extends State<HomeView> {
         color: Colors.black87,
         child: SafeArea(
             bottom: false,
-            child: widget
-                .tabs[Provider.of<ListenedValues>(context).currentHomeIndex]),
+            child: widget.tabs[
+                Provider.of<ListenedValues>(context, listen: true)
+                    .currentHomeIndex]),
       ),
     );
   }

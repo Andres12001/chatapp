@@ -145,7 +145,7 @@ class _ZegoStartCallInvitationButtonState
 
         return true;
       },
-      onPressed: onPressed,
+      onPressed: (code, message, invitationID, errorUsers) {},
       clickableTextColor: widget.clickableTextColor,
       unclickableTextColor: widget.unclickableTextColor,
       clickableBackgroundColor: widget.clickableBackgroundColor,

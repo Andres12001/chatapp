@@ -75,66 +75,61 @@ class ScheduleView extends StatelessWidget {
       child: RefreshIndicator(
           onRefresh: _pullRefresh,
           child: SingleChildScrollView(
-            child: Expanded(
-              child: Column(
-                children: [
-                  ButtonOriginal(
-                      text: "schd_meet".tr(),
-                      bgColor: kBackgroundColor,
-                      txtColor: kPrimaryColor,
-                      onPress: () {
-                        Navigator.pushNamed(
-                            context, ScheduleMeetingView.screenRouteName);
-                      },
-                      icon: Icons.alarm_add,
-                      width: double.infinity),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "ur_schd_meet".tr(),
-                    textAlign: TextAlign.start,
-                    maxLines: 1,
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: kLabelColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Center(
-                    child: Text("meet_order_nearst".tr(),
-                        style: TextStyle(fontSize: 12, color: Colors.grey)),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Provider.of<ListenedValues>(context)
-                          .scheduleHistoryList
-                          .isEmpty
-                      ? Center(
-                          child: Text("no_sched".tr(),
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.grey)),
-                        )
-                      : ListView.builder(
-                          primary: false,
-                          shrinkWrap: true,
-                          itemCount: Provider.of<ListenedValues>(context)
-                              .scheduleHistoryList
-                              .length,
-                          itemBuilder: (context, index) {
-                            return HistoryCell(
-                              historyItem: Provider.of<ListenedValues>(context)
-                                  .scheduleHistoryList[index],
-                              historyVM: historyVM,
-                            );
-                          },
-                        ),
-                  AdmobClass.shared.displayAdBanner()
-                ],
-              ),
+            child: Column(
+              children: [
+                ButtonOriginal(
+                    text: "schd_meet".tr(),
+                    bgColor: kBackgroundColor,
+                    txtColor: kPrimaryColor,
+                    onPress: () {
+                      Navigator.pushNamed(
+                          context, ScheduleMeetingView.screenRouteName);
+                    },
+                    icon: Icons.alarm_add,
+                    width: double.infinity),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "ur_schd_meet".tr(),
+                  textAlign: TextAlign.start,
+                  maxLines: 1,
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: kLabelColor,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Center(
+                  child: Text("meet_order_nearst".tr(),
+                      style: TextStyle(fontSize: 12, color: Colors.grey)),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Provider.of<ListenedValues>(context).scheduleHistoryList.isEmpty
+                    ? Center(
+                        child: Text("no_sched".tr(),
+                            style: TextStyle(fontSize: 15, color: Colors.grey)),
+                      )
+                    : ListView.builder(
+                        primary: false,
+                        shrinkWrap: true,
+                        itemCount: Provider.of<ListenedValues>(context)
+                            .scheduleHistoryList
+                            .length,
+                        itemBuilder: (context, index) {
+                          return HistoryCell(
+                            historyItem: Provider.of<ListenedValues>(context)
+                                .scheduleHistoryList[index],
+                            historyVM: historyVM,
+                          );
+                        },
+                      ),
+                AdmobClass.shared.displayAdBanner()
+              ],
             ),
           )),
     );

@@ -14,14 +14,14 @@ import '../../View/Auth/Screens/WelcomeView.dart';
 class HistoryVM {
   final FirebaseMethods _firebaseMethods = FirebaseMethods();
   HistoryVM(BuildContext context, bool isSchedule) {
-    if (myId == null ||
-        (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, WelcomeView.screenRouteName, (route) => false);
-      });
-      return;
-    }
+    // if (myId == null ||
+    //     (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     Navigator.pushNamedAndRemoveUntil(
+    //         context, WelcomeView.screenRouteName, (route) => false);
+    //   });
+    //   return;
+    // }
     getHistory(context, false, isSchedule);
   }
 

@@ -27,15 +27,15 @@ class ScheduleSheetVM {
   FirebaseAuthMethods _firebaseAuthMethods = FirebaseAuthMethods();
 
   ScheduleSheetVM() {
-    if (myId == null ||
-        (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushNamedAndRemoveUntil(
-            NavigationService.navigatorKey.currentContext!,
-            WelcomeView.screenRouteName,
-            (route) => false);
-      });
-    }
+    // if (myId == null ||
+    //     (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     Navigator.pushNamedAndRemoveUntil(
+    //         NavigationService.navigatorKey.currentContext!,
+    //         WelcomeView.screenRouteName,
+    //         (route) => false);
+    //   });
+    // }
   }
 
   void fieldUpdate(String value, TextEditingController controller) {

@@ -115,7 +115,9 @@ class _ZegoBottomMenuBarState extends State<ZegoBottomMenuBar> {
       buttonList.removeRange(0, widget.config.bottomMenuBarConfig.maxCount - 1);
       displayButtonList.add(
         buttonWrapper(
-          child: ZegoMoreButton(menuButtonList: buttonList),
+          child: ZegoMoreButton(
+            menuButtonListFunc: () => buttonList,
+          ),
         ),
       );
     } else {

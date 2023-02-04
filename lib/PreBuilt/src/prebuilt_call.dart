@@ -171,7 +171,7 @@ class _ZegoUIKitPrebuiltCallState extends State<ZegoUIKitPrebuiltCall>
               ..useFrontFacingCamera(true)
               ..updateVideoViewMode(
                   config.audioVideoViewConfig.useVideoViewAspectFill)
-              ..setVideoMirrorMode(true)
+              // ..setVideoMirrorMode(true)
               ..turnCameraOn(config.turnOnCameraWhenJoining)
               ..turnMicrophoneOn(config.turnOnMicrophoneWhenJoining)
               ..setAudioOutputToSpeaker(config.useSpeakerWhenJoining)

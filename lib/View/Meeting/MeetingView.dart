@@ -17,16 +17,16 @@ class MeetingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (MeetingVM.shared.meetingId.isEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushNamedAndRemoveUntil(
-            context,
-            myId == null
-                ? WelcomeView.screenRouteName
-                : HomeView.screenRouteName,
-            (route) => false);
-      });
-    }
+    // if (MeetingVM.shared.meetingId.isEmpty) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     Navigator.pushNamedAndRemoveUntil(
+    //         context,
+    //         myId == null
+    //             ? WelcomeView.screenRouteName
+    //             : HomeView.screenRouteName,
+    //         (route) => false);
+    //   });
+    // }
     return SafeArea(
       bottom: false,
       child: ZegoUIKitPrebuiltCall(

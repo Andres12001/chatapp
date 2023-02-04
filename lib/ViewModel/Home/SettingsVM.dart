@@ -20,16 +20,16 @@ class SettingsVM {
   }
 
   SettingsVM() {
-    if (myId == null ||
-        (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushNamedAndRemoveUntil(
-            NavigationService.navigatorKey.currentContext!,
-            WelcomeView.screenRouteName,
-            (route) => false);
-      });
-      return;
-    }
+    // if (myId == null ||
+    //     (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     Navigator.pushNamedAndRemoveUntil(
+    //         NavigationService.navigatorKey.currentContext!,
+    //         WelcomeView.screenRouteName,
+    //         (route) => false);
+    //   });
+    //   return;
+    // }
     getmyUser(NavigationService.navigatorKey.currentContext!);
   }
   void getmyUser(BuildContext context) {

@@ -38,88 +38,85 @@ class HomeContent extends StatelessWidget {
         slivers: [
           SliverFillRemaining(
             hasScrollBody: false,
-            child: Expanded(
-              child: Container(
-                color: kBackgroundColor,
-                child: Column(children: [
-                  //main container
-                  HomeArc(
-                      kCurveHeight: 60,
-                      kViewHeight: 200,
-                      contentWidget: HomeRow(
-                        scrollController: scrollController,
-                      )),
+            child: Container(
+              color: kBackgroundColor,
+              child: Column(children: [
+                //main container
+                HomeArc(
+                    kCurveHeight: 60,
+                    kViewHeight: 200,
+                    contentWidget: HomeRow(
+                      scrollController: scrollController,
+                    )),
 
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "yr_recent_meet".tr(),
-                        textAlign: TextAlign.start,
-                        maxLines: 1,
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: kLabelColor,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Provider.of<ListenedValues>(context).recentMeeting == null
-                          ? Text("no_rece_meet".tr(),
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.grey))
-                          : InkWell(
-                              onTap: () {
-                                if (Provider.of<ListenedValues>(context,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "yr_recent_meet".tr(),
+                      textAlign: TextAlign.start,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: kLabelColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Provider.of<ListenedValues>(context).recentMeeting == null
+                        ? Text("no_rece_meet".tr(),
+                            style: TextStyle(fontSize: 15, color: Colors.grey))
+                        : InkWell(
+                            onTap: () {
+                              if (Provider.of<ListenedValues>(context,
+                                          listen: false)
+                                      .recentMeeting!
+                                      .meeting
+                                      .meetingState ==
+                                  MeetingStateTypes.active.index) {
+                                MeetingVM.shared.joinRoom(
+                                    context: context,
+                                    userName: FirebaseAuth.instance.currentUser
+                                            ?.displayName ??
+                                        "",
+                                    userId: myId!,
+                                    enteredMeetingId:
+                                        Provider.of<ListenedValues>(context,
+                                                listen: false)
+                                            .recentMeeting!
+                                            .meeting
+                                            .meetingId,
+                                    password: Provider.of<ListenedValues>(
+                                            context,
                                             listen: false)
                                         .recentMeeting!
                                         .meeting
-                                        .meetingState ==
-                                    MeetingStateTypes.active.index) {
-                                  MeetingVM.shared.joinRoom(
-                                      context: context,
-                                      userName: FirebaseAuth.instance
-                                              .currentUser?.displayName ??
-                                          "",
-                                      userId: myId!,
-                                      enteredMeetingId:
-                                          Provider.of<ListenedValues>(context,
-                                                  listen: false)
-                                              .recentMeeting!
-                                              .meeting
-                                              .meetingId,
-                                      password: Provider.of<ListenedValues>(
-                                              context,
-                                              listen: false)
-                                          .recentMeeting!
-                                          .meeting
-                                          .password);
-                                } else {
-                                  QuickAlert.show(
-                                    context: context,
-                                    type: QuickAlertType.error,
-                                    title: 'ops'.tr(),
-                                    text: "cnt_ended_meet".tr(),
-                                  );
-                                }
-                              },
-                              child: HistoryCell(
-                                  historyItem: Provider.of<ListenedValues>(
-                                          context,
-                                          listen: false)
-                                      .recentMeeting!,
-                                  historyVM: historyVM),
-                            ),
-                    ],
-                  ),
-                  AdmobClass.shared.displayAdBanner()
-                ]),
-              ),
+                                        .password);
+                              } else {
+                                QuickAlert.show(
+                                  context: context,
+                                  type: QuickAlertType.error,
+                                  title: 'ops'.tr(),
+                                  text: "cnt_ended_meet".tr(),
+                                );
+                              }
+                            },
+                            child: HistoryCell(
+                                historyItem: Provider.of<ListenedValues>(
+                                        context,
+                                        listen: false)
+                                    .recentMeeting!,
+                                historyVM: historyVM),
+                          ),
+                  ],
+                ),
+                AdmobClass.shared.displayAdBanner()
+              ]),
             ),
           ),
         ]);

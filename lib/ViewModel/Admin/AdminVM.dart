@@ -17,55 +17,56 @@ import '../../View/Auth/Screens/WelcomeView.dart';
 class AdminVM {
   final FirebaseMethods _firebaseMethods = FirebaseMethods();
   AdminVM() {
-    if (myId == null ||
-        !Provider.of<ListenedValues>(
-                NavigationService.navigatorKey.currentContext!)
-            .isAdmin ||
-        (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushNamedAndRemoveUntil(
-            NavigationService.navigatorKey.currentContext!,
-            WelcomeView.screenRouteName,
-            (route) => false);
-      });
-    }
+    // if (myId == null ||
+    //     !Provider.of<ListenedValues>(
+    //             NavigationService.navigatorKey.currentContext!)
+    //         .isAdmin ||
+    //     (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     Navigator.pushNamedAndRemoveUntil(
+    //         NavigationService.navigatorKey.currentContext!,
+    //         WelcomeView.screenRouteName,
+    //         (route) => false);
+    //   });
+    // }
   }
 
   void getAllMeetings(BuildContext context) {
     if (myId == null) {
       return;
     }
-
     Provider.of<ListenedValues>(context, listen: false).setLoading(true);
     Provider.of<ListenedValues>(context, listen: false).clearAdminMeetingList();
     _firebaseMethods.getSingleDataFromFirebase(
         childPath: "/${FirebaseConst.MEETINGS}/",
         onSucc: ((snapshot) {
           late Map<String, dynamic> allMeetingMap;
-
           allMeetingMap = Map<String, dynamic>.from(snapshot.value as Map);
+
           if (allMeetingMap is! Map<String, dynamic>) {
             Provider.of<ListenedValues>(context, listen: false)
                 .setLoading(false);
             return;
           }
-
+          print(allMeetingMap.values);
           for (var value in allMeetingMap.values) {
             late Map<String, dynamic> meetingMap;
-            print(value);
             meetingMap = Map<String, dynamic>.from(value as Map);
+            print(value);
+
             if (meetingMap is! Map<String, dynamic>) {
               Provider.of<ListenedValues>(context, listen: false)
                   .setLoading(false);
-              return;
+              continue;
             }
 
             var meeting = Meeting.transformMeeting(meetingMap);
             if (meeting is! Meeting) {
               Provider.of<ListenedValues>(context, listen: false)
                   .setLoading(false);
-              return;
+              continue;
             }
+
             getAdmin(context, meeting);
           }
           Provider.of<ListenedValues>(context, listen: false).setLoading(false);
@@ -104,7 +105,6 @@ class AdminVM {
     if (myId == null) {
       return;
     }
-
     Provider.of<ListenedValues>(context, listen: false).setLoading(true);
     Provider.of<ListenedValues>(context, listen: false).clearAdminUsersList();
     _firebaseMethods.getSingleDataFromFirebase(
@@ -125,15 +125,16 @@ class AdminVM {
             if (userMap is! Map<String, dynamic>) {
               Provider.of<ListenedValues>(context, listen: false)
                   .setLoading(false);
-              return;
+              continue;
             }
 
             var user = dbUser.User.transformUser(userMap);
             if (user is! dbUser.User) {
               Provider.of<ListenedValues>(context, listen: false)
                   .setLoading(false);
-              return;
+              continue;
             }
+
             Provider.of<ListenedValues>(context, listen: false)
                 .updateAdminUsersList(user);
           }

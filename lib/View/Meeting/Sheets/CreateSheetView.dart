@@ -53,7 +53,7 @@ class CreateMeetingView extends StatelessWidget {
                     WelcomeHeader(
                       size: size,
                       title: 'crt_meet'.tr(),
-                      fontSize: 50,
+                      fontSize: 30,
                     ),
                     CreateMeetingContent(createSheetVM: _createSheetVM),
                     AdmobClass.shared.displayAdBanner()

@@ -33,15 +33,15 @@ class SignupVM {
   final FirebaseMethods _firebaseMethods = FirebaseMethods();
 
   SignupVM() {
-    if (myId != null &&
-        !(FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushNamedAndRemoveUntil(
-            NavigationService.navigatorKey.currentContext!,
-            HomeView.screenRouteName,
-            (route) => false);
-      });
-    }
+    // if (myId != null &&
+    //     !(FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     Navigator.pushNamedAndRemoveUntil(
+    //         NavigationService.navigatorKey.currentContext!,
+    //         HomeView.screenRouteName,
+    //         (route) => false);
+    //   });
+    // }
   }
 
   void fieldUpdate(String value, TextEditingController controller,

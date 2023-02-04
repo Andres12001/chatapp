@@ -52,7 +52,7 @@ class JoinMeetingView extends StatelessWidget {
                     WelcomeHeader(
                       size: size,
                       title: 'jin_meet'.tr(),
-                      fontSize: 50,
+                      fontSize: 30,
                     ),
                     JoinMeetingContent(joinSheetVM: _joinSheetVM),
                     AdmobClass.shared.displayAdBanner()
