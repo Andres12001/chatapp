@@ -5,8 +5,10 @@ import '../../Helpers/ListenedValues.dart';
 
 class HomeVM {
   void scrollAnimated(ScrollController scrollController, double position) {
-    scrollController.animateTo(position,
-        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    if (scrollController.hasClients) {
+      scrollController.animateTo(position,
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    }
   }
 
   void onTabTapped(int index, BuildContext context) {
