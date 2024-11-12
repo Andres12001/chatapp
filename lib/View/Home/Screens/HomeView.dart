@@ -49,9 +49,10 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     //Waiting the widget to be loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      MainVM.shared.performAdmineUser(context);
       widget._homeVM.scrollAnimated(widget.scrollController, 38);
     });
-    MainVM.shared.performAdmineUser(context);
+
     // if (myId == null ||
     //     (FirebaseAuth.instance.currentUser?.isAnonymous ?? true)) {
     //   WidgetsBinding.instance.addPostFrameCallback((_) {

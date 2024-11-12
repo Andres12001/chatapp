@@ -19,8 +19,11 @@ class AdminView extends StatelessWidget {
   final AdminVM _adminVM = AdminVM();
   @override
   Widget build(BuildContext context) {
-    _adminVM.getAllMeetings(context);
-    _adminVM.getAllUsers(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _adminVM.getAllMeetings(context);
+      _adminVM.getAllUsers(context);
+    });
+
     return Scaffold(
         appBar: AppBar(
           elevation: 0,

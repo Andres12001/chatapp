@@ -51,13 +51,16 @@ class AdminUserCell extends StatelessWidget {
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          "${user.nameF} ${user.nameL}",
-                          maxLines: 1,
-                          style: TextStyle(
-                              color: kLabelColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                        Flexible(
+                          child: Text(
+                            "${user.nameF} ${user.nameL}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: kLabelColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
                         ),
                         SizedBox(
                           width: 10,

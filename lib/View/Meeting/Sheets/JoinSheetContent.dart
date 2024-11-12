@@ -18,7 +18,9 @@ class JoinMeetingContent extends StatelessWidget {
   final JoinSheetVM joinSheetVM;
   @override
   Widget build(BuildContext context) {
-    joinSheetVM.checkName();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      joinSheetVM.checkName();
+    });
     return Consumer<ListenedValues>(builder: (context, updatedData, child) {
       return Container(
         //  margin: EdgeInsets.only(top: size.height * 0.09),

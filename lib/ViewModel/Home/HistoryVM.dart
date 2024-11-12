@@ -22,7 +22,9 @@ class HistoryVM {
     //   });
     //   return;
     // }
-    getHistory(context, false, isSchedule);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getHistory(context, false, isSchedule);
+    });
   }
 
   void getHistory(BuildContext context, bool isReloaded, bool isSchedule) {

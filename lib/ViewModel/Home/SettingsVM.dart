@@ -30,7 +30,10 @@ class SettingsVM {
     //   });
     //   return;
     // }
-    getmyUser(NavigationService.navigatorKey.currentContext!);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getmyUser(NavigationService.navigatorKey.currentContext!);
+    });
   }
   void getmyUser(BuildContext context) {
     if (myId == null ||
